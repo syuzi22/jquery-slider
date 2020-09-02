@@ -1,0 +1,38 @@
+{
+  "name": "range-slider",
+  "version": "1.0.0",
+  "description": "plugin for jquery",
+  "main": "index.js",
+  "scripts": {
+    "dev": "./node_modules/.bin/webpack --mode development",
+    "build": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack --mode production",
+    "start": "webpack-dev-server --mode development --open"
+  },
+  "browserslist": "> 0.25%, not dead",
+  "author": "Susanna <syuzi22@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.11.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^4.2.2",
+    "eslint": "^7.7.0",
+    "eslint-plugin-fsd": "^1.0.1",
+    "html-webpack-plugin": "^4.3.0",
+    "jshint": "^2.12.0",
+    "mini-css-extract-plugin": "^0.10.0",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^8.0.3",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.10.4",
+    "jquery": "^3.5.1",
+    "normalize.css": "^8.0.1"
+  }
+}
