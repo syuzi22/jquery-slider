@@ -1,2 +1,21 @@
 @import '~normalize.css';
 
+.slider {
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+.slider__line {
+    background-color: burlywood;
+    border-radius: 5px;
+}
+
+.slider__line_vertical {
+    width: 10px;
+    height: 500px;
+  }
+
+  .slider__line_horizontal{
+    width: 500px;
+    height: 10px;
+  }
