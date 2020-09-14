@@ -1,5 +1,4 @@
 import {Observable} from './Observable'
-import {Options} from './Options'
 
 export class Model extends Observable {
     node: Element

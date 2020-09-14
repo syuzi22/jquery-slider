@@ -9,12 +9,13 @@ export class Controller {
         this.view = view;
     }
     onEvent (options) {
-        // console.log(options);
         this.view.show(this.model.node);
         if (options.orientation === 'vertical' ) {
             this.view.setOrientation(options.orientation);
+            this.view.addThumbMovementVertical(this.model.node);
         }else {
             this.view.setOrientation();
+            this.view.addThumbMovementHorizontal(this.model.node);
         }
     }
 }

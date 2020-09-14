@@ -1,21 +1,54 @@
 @import '~normalize.css';
 
 .slider {
-    margin-top: 20px;
+    margin-top: 100px;
     margin-left: 50px;
 }
 
 .slider__line {
+  position: relative;
     background-color: burlywood;
     border-radius: 5px;
 }
 
 .slider__line_vertical {
     width: 10px;
-    height: 500px;
+    height: 300px;
   }
 
-  .slider__line_horizontal{
-    width: 500px;
-    height: 10px;
-  }
+.slider__line_horizontal{
+  width: 300px;
+  height: 10px;
+}
+
+.slider__thumb {
+  position: absolute;
+  border-radius: 3px;
+  background: blue;
+  cursor: pointer;
+}
+
+.slider__current-value {
+  margin-top:-20px;
+  margin-left: -5px;
+  user-select: none;
+}
+
+.slider__thumb_vertical {
+  width: 20px;
+  height: 10px;
+  left: -5px;
+}
+
+.slider__thumb_horizontal {
+  width: 10px;
+  height: 20px;
+  top: -5px;
+}
+
+.slider__minmax {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 5px;
+}
