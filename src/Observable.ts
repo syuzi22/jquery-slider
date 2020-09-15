@@ -12,5 +12,10 @@ export class Observable {
         this.observers.forEach((observer) => {
             observer.onEvent(data);
         });
+        /*
+        if (data.domEvent && data.eventTarget) {
+            data.eventTarget.dispatchEvent(data.domEvent)
+        }
+        */
     }
 }

@@ -1,42 +1,45 @@
 import './style.css'
 import { Model } from './Model'
 import { View } from './View'
+import {Thumb} from './Thumb'
 import {Controller} from './Controller'
 import {Options, OptionsInterface} from './Options'
 
 
-$.fn.slider = function (settings: object) {
+$.fn.slider = function (settings: object) : JQuery {
     const options = new Options(settings);
 
     this.each(function () {
-        const node = this
-        console.log(node)
-        let options = new Options(settings);
-        console.log(options);
-        let model = new Model();
-        let view = new View();
-        let controller = new Controller(model, view);
-        model.addObserver(controller);
-        view.addObserver(controller);
-        model.init(options, node);
+        const node = this;
+        const model = new Model();
+        const view = new View();
+        const thumb = new Thumb(node);
+        const controller = new Controller(model, view, thumb);
+        controller.init(options, node);
+        controller.testFunc();
     })
 
     // Public API
-    this.update = function (settings) {
-        console.log(settings);
-    }
+    // this.update = function (settings) {
+    //     console.log(settings);
+    // }
 
     // Save this instance for easy access from outside
     this.data('slider', this);
 
     return this // jQuery object for chaining
 }
-
+/////////////////////////////////////////////////////////////////
+// Usage
 $(document).ready(() => {
     var mySlider = $('.slider').slider({
-        orientation: 'horizontal'
+        type: 'single',
+        // orientation: 'vertical'
     });
-    mySlider.data('slider').update({
-        orientation: 'horizontal'
-    });
+    // mySlider.on('slider.onValueChange', (newValue, oldValue) => {
+    //     console.log(`slider value changed from ${oldValue} ${newValue}`)
+    // })
+    // mySlider.data('slider').update({
+    //     orientation: 'horizontal'
+    // });
 })
