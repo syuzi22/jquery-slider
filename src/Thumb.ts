@@ -1,4 +1,5 @@
 import {Observable} from './Observable'
+import { ThumbChangedPosition, CalcedSliderWidth } from './Event'
 
 export class Thumb extends Observable {
     sliderNode: Element;
@@ -26,39 +27,40 @@ export class Thumb extends Observable {
 
     addHorizontalMovement() {
         const self = this;
-        let thumb = this.selfNode;
-        let line = this.sliderNode.querySelector('.slider__line');
-        let sliderWidth = line.offsetWidth - thumb.offsetWidth;
-        this.notifyObservers({
-            'sliderWidth': sliderWidth
-        })
+        const thumb = this.selfNode;
+        const line = this.sliderNode.querySelector('.slider__line');
+        const calcedSliderWidth = new CalcedSliderWidth(line.offsetWidth - thumb.offsetWidth);
+        self.notifyObservers(calcedSliderWidth);
+
+
 
         thumb.onmousedown = function(event) {
-            event.preventDefault(); // предотвратить запуск выделения (действие браузера)
+            event.preventDefault();
             let shiftX = event.clientX - thumb.getBoundingClientRect().left;
-            // shiftY здесь не нужен, слайдер двигается только по горизонтали
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
 
             function onMouseMove(event) {
                 let newLeft = event.clientX - shiftX - line.getBoundingClientRect().left;
 
-                // курсор вышел из слайдера => оставить бегунок в его границах.
                 if (newLeft < 0) {
                     newLeft = 0;
                 }
-                let rightEdge = sliderWidth;
+                let rightEdge = line.offsetWidth - thumb.offsetWidth;
                 if (newLeft > rightEdge) {
                     newLeft = rightEdge;
                 }
-                self.notifyObservers({
-                    'newLeft': newLeft
-                })
+
+                const thumbChangedPos = new ThumbChangedPosition(newLeft);
+                self.notifyObservers(thumbChangedPos);
 
                 thumb.style.left = newLeft + 'px';
             }
 
             function onMouseUp() {
+
+                thumb.style.left = self.adjusted + 'px';
+
                 document.removeEventListener('mouseup', onMouseUp);
                 document.removeEventListener('mousemove', onMouseMove);
             }
@@ -68,5 +70,19 @@ export class Thumb extends Observable {
         };
 
       };
+    }
+
+    showFrom() {
+        let from = document.createElement('div');
+        from.classList.add('slider__from');
+        this.sliderNode.querySelector('.slider__thumb').append(from);
+        from.textContent = 0;
+    }
+    setValue(value) {
+        this.sliderNode.querySelector('.slider__from').textContent = value;
+    }
+    setAdjustedValue(value) {
+        this.adjusted = value;
+        this.selfNode.style.left = this.adjusted + 'px';
     }
 }

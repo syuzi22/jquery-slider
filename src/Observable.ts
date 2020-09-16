@@ -1,13 +1,18 @@
+import { Controller } from "./Controller";
+
 export class Observable {
+    observers: Controller[];
+
     constructor() {
         this.observers = [];
     }
-    addObserver(obj) {
-        this.observers.push(obj);
+    addObserver(observer: Controller) {
+        this.observers.push(observer);
     }
-    deleteObserver(obj) {
-        this.observers = this.observers.filter((observer) => observer !== obj);
+    deleteObserver(observer: Controller) {
+        this.observers = this.observers.filter((elem) => elem !== observer);
     }
+    // TODO: accept Event class instead of any
     notifyObservers(data) {
         this.observers.forEach((observer) => {
             observer.onEvent(data);
