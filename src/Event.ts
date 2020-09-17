@@ -20,7 +20,6 @@ export class ThumbChangedPosition extends SliderEvent{
 }
 
 
-
 export class CalcedValue extends SliderEvent{
     value: number
     constructor(val: number) {
@@ -34,5 +33,13 @@ export class AdjustedValue extends SliderEvent {
     constructor(val: number) {
         super();
         this.value = val;
+    }
+}
+
+export class LineClicked extends SliderEvent {
+    position: number
+    constructor(val: number) {
+        super();
+        this.position = val;
     }
 }

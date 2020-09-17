@@ -10,6 +10,7 @@ export class Model extends Observable {
     constructor(options: object) {
         super();
         this.options = options;
+        this.value = options.from;
         // this.type = options.type;
         // this.min = options.min;
         // this.max = options.max;
@@ -27,8 +28,12 @@ export class Model extends Observable {
         this.sliderWidth = val; //290
     }
 
-    calcValue(position: number) {
-        this.value = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+    calcValue(position?: number) {
+        if (position) {
+            this.value = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+        }else {
+            this.value = this.options.from;
+        }
         const calcedValue = new CalcedValue(this.value);
         this.notifyObservers(calcedValue)
     }
@@ -46,7 +51,9 @@ export class Model extends Observable {
         }
         this.value = Math.round(value / this.options.step) * this.options.step;
         if (this.value > this.options.max) {
-            this.value = this.options.max;
+            this.value = this.options.min;
+        }else if (this.value < this.options.min) {
+            this.value = this.options.min;
         }
         const calcedValue = new CalcedValue(this.value);
         this.timerId = setTimeout(function() {

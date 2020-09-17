@@ -14,7 +14,7 @@ $.fn.slider = function (settings: object) : JQuery {
         const node = this as HTMLElement;
         const model = new Model(options);
         const view = new View();
-        const thumb = new Thumb(node);
+        const thumb = new Thumb();
         const controller = new Controller(model, view, thumb);
         controller.init(options, node);
         controllers.set(node, controller);
@@ -42,12 +42,8 @@ $(document).ready(() => {
 
     const mySlider = $('.slider').slider({
         type: 'single',
-        // orientation: 'vertical'
+        from: 30
     });
-
-    // mySlider.data('slider').update({
-    //     orientation: 'horizontal'
-    // });
 
     mySlider.on('slider.valueCalced', function (event, value) {
         input.value = value;

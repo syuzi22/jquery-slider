@@ -2,7 +2,7 @@ import {Model} from './Model'
 import {View} from './View'
 import {Thumb} from './Thumb'
 import {Options} from './Options'
-import { ThumbChangedPosition, CalcedValue, AdjustedValue, CalcedSliderWidth } from './Event'
+import { ThumbChangedPosition, CalcedValue, AdjustedValue, CalcedSliderWidth, LineClicked } from './Event'
 
 export class Controller {
     private model: Model
@@ -28,13 +28,17 @@ export class Controller {
 
         this.view.createShell(node);
         this.view.drawLine(options.orientation);
+        this.view. addLineClick();
         this.view.showMinMax(options.min, options.max);
 
 
-        this.thumb.create();
+        this.thumb.create(this.node);
+        this.thumb.showFrom();
         this.thumb.showHorizontal();
         this.thumb.addHorizontalMovement();
-        this.thumb.showFrom();
+
+        this.model.calcValue();
+        this.model.calcAdjustedValue();
 
     }
     onEvent (obj: object) {
@@ -44,11 +48,13 @@ export class Controller {
             this.model.calcValue(obj.position);
             this.model.calcAdjustedValue();
         }else if (obj instanceof CalcedValue) {
-            // this.model.calcAdjustedValue();
             this.thumb.setValue(obj.value);
             $(this.node).trigger('slider.valueCalced', [obj.value])
         }else if (obj instanceof AdjustedValue) {
             this.thumb.setAdjustedValue(obj.value);
+        }else if (obj instanceof LineClicked) {
+            this.model.calcValue(obj.position);
+            this.model.calcAdjustedValue();
         }
     }
 

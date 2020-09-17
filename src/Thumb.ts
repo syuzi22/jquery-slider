@@ -5,14 +5,14 @@ export class Thumb extends Observable {
     sliderNode: Element;
     selfNode: Element;
 
-    constructor(node: Element) {
+    constructor() {
         super();
-        this.sliderNode = node;
         this.selfNode = document.createElement('div');
         this.selfNode.classList.add('slider__thumb');
     }
 
-    create() {
+    create(node: Element) {
+        this.sliderNode = node;
         let line = this.sliderNode.querySelector('.slider__line');
         line.appendChild(this.selfNode);
     }
@@ -76,7 +76,7 @@ export class Thumb extends Observable {
         let from = document.createElement('div');
         from.classList.add('slider__from');
         this.sliderNode.querySelector('.slider__thumb').append(from);
-        from.textContent = 0;
+
     }
     setValue(value) {
         this.sliderNode.querySelector('.slider__from').textContent = value;
