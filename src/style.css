@@ -1,6 +1,7 @@
 @import '~normalize.css';
 
 .slider {
+    width: 600px;
     margin-top: 100px;
     margin-left: 50px;
 }
@@ -11,7 +12,7 @@
 }
 
 .slider__line {
-  position: relative;
+    position: relative;
     background-color: burlywood;
     border-radius: 5px;
 }
@@ -22,7 +23,6 @@
   }
 
 .slider__line_horizontal{
-  width: 300px;
   height: 10px;
 }
 
@@ -50,10 +50,15 @@
   user-select: none;
 }
 
-
 .slider__minmax {
-  width: 300px;
   display: flex;
   justify-content: space-between;
   padding-top: 5px;
+}
+
+.slider__progressbar {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background-color: green;
+  height: 10px;
 }

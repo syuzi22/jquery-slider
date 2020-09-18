@@ -1,88 +1,116 @@
 import {Observable} from './Observable'
-import { ThumbChangedPosition, CalcedSliderWidth } from './Event'
+import { ThumbChangedPosition, CalcedSliderWidth, MouseUpMessage } from './Event'
 
 export class Thumb extends Observable {
-    sliderNode: Element;
-    selfNode: Element;
+    thumb:HTMLElement;
 
-    constructor() {
+    constructor(node: HTMLElement) {
         super();
-        this.selfNode = document.createElement('div');
-        this.selfNode.classList.add('slider__thumb');
+        this.thumb = node;
     }
 
-    create(node: Element) {
-        this.sliderNode = node;
-        let line = this.sliderNode.querySelector('.slider__line');
-        line.appendChild(this.selfNode);
+    drawHorizontal() {
+        this.thumb.classList.add('slider__thumb_horizontal');
     }
 
-    showVertical() {
-        this.selfNode.classList.add('slider__thumb_vertical');
+    drawVertical() {
+        this.thumb.classList.add('slider__thumb_vertical');
     }
 
-    showHorizontal() {
-        this.selfNode.classList.add('slider__thumb_horizontal');
-    }
-
-    addHorizontalMovement() {
+    addHorizontalMovement(node: HTMLElement) {
         const self = this;
-        const thumb = this.selfNode;
-        const line = this.sliderNode.querySelector('.slider__line');
+        const thumb = this.thumb;
+        const line = node;
+
         const calcedSliderWidth = new CalcedSliderWidth(line.offsetWidth - thumb.offsetWidth);
         self.notifyObservers(calcedSliderWidth);
-
-
 
         thumb.onmousedown = function(event) {
             event.preventDefault();
             let shiftX = event.clientX - thumb.getBoundingClientRect().left;
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
-
             function onMouseMove(event) {
                 let newLeft = event.clientX - shiftX - line.getBoundingClientRect().left;
-
-                if (newLeft < 0) {
-                    newLeft = 0;
-                }
+                if (newLeft < 0) { newLeft = 0; }
                 let rightEdge = line.offsetWidth - thumb.offsetWidth;
-                if (newLeft > rightEdge) {
-                    newLeft = rightEdge;
-                }
+                if (newLeft > rightEdge) { newLeft = rightEdge; }
 
                 const thumbChangedPos = new ThumbChangedPosition(newLeft);
                 self.notifyObservers(thumbChangedPos);
-
-                thumb.style.left = newLeft + 'px';
             }
-
             function onMouseUp() {
-
-                thumb.style.left = self.adjusted + 'px';
+                const mouseUp = new MouseUpMessage();
+                self.notifyObservers(mouseUp);
 
                 document.removeEventListener('mouseup', onMouseUp);
                 document.removeEventListener('mousemove', onMouseMove);
             }
-
-        thumb.ondragstart = function() {
-            return false;
-        };
-
+        thumb.ondragstart = function() { return false; };
       };
     }
 
-    showFrom() {
-        let from = document.createElement('div');
-        from.classList.add('slider__from');
-        this.sliderNode.querySelector('.slider__thumb').append(from);
+    moveThumbOn(position) {
+        this.thumb.style.left = position + 'px';
+    }
 
-    }
-    setValue(value) {
-        this.sliderNode.querySelector('.slider__from').textContent = value;
-    }
-    setAdjustedValue(value) {
-        this.adjusted = value;
-        this.selfNode.style.left = this.adjusted + 'px';
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // addThumbMovement(orientation) {
+  //   const self = this;
+  //   let line = this.sliderNode.querySelector('.slider__line');
+  //   let thumb = this.sliderNode.querySelector('.slider__thumb');
+
+  //   if (orientation === 'vertical') {
+  //         thumb.onmousedown = function(event) {
+  //         event.preventDefault();
+
+  //         let shiftY = event.clientY - thumb.getBoundingClientRect().top;
+
+  //         document.addEventListener('mousemove', onMouseMove);
+  //         document.addEventListener('mouseup', onMouseUp);
+
+  //         function onMouseMove(event) {
+  //           let newTop = event.clientY - shiftY - line.getBoundingClientRect().top;
+
+  //           // курсор вышел из слайдера => оставить бегунок в его границах.
+  //           if (newTop < 0) {
+  //               newTop = 0;
+  //           }
+  //           let bottomEdge = line.offsetHeight - thumb.offsetHeight;
+  //           if (newTop > bottomEdge) {
+  //               newTop = bottomEdge;
+  //           }
+  //           thumb.style.top = newTop + 'px';
+  //         }
+
+  //         function onMouseUp() {
+  //           document.removeEventListener('mouseup', onMouseUp);
+  //           document.removeEventListener('mousemove', onMouseMove);
+  //         }
+
+  //       };
+
+  //       thumb.ondragstart = function() {
+  //         return false;
+  //       };
+  //   }

@@ -1,10 +1,6 @@
 import './style.css'
-import { Model } from './Model'
-import { View } from './View'
-import {Thumb} from './Thumb'
 import {Controller} from './Controller'
 import {Options, OptionsInterface} from './Options'
-import { Observable } from './Observable'
 
 $.fn.slider = function (settings: object) : JQuery {
     const options = new Options(settings);
@@ -12,10 +8,7 @@ $.fn.slider = function (settings: object) : JQuery {
 
     this.each(function () {
         const node = this as HTMLElement;
-        const model = new Model(options);
-        const view = new View();
-        const thumb = new Thumb();
-        const controller = new Controller(model, view, thumb);
+        const controller = new Controller();
         controller.init(options, node);
         controllers.set(node, controller);
     })
@@ -31,23 +24,47 @@ $.fn.slider = function (settings: object) : JQuery {
         });
     };
 
-    // Save this instance for easy access from outside
-    this.data('slider', this);
+    this.hideFrom = function (value: boolean) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).hideValue(value);
+        });
+    };
 
+    this.changeStep = function (step: number) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).changeStep(step);
+        });
+    };
+
+
+    this.data('slider', this); // Save this instance for easy access from outside
     return this // jQuery object for chaining
 }
+
 /////////////////////////////////////////////////////////////////
+//создаю слайдер, как внешний пользователь\/
+
 $(document).ready(() => {
     const input = document.querySelector('.slider-input') as HTMLInputElement;
 
-    const mySlider = $('.slider').slider({
-        type: 'single',
-        from: 30
-    });
+    const mySlider = $('.slider')
+        .on('slider.valueCalced', function (event, value) {
+            input.value = value;
+        })
+        .slider({
+            type: 'single',
+            step: 20,
+            from: 10 // если from не соответствует step, то значение будет скорректировано с учетом шага
+        });
 
-    mySlider.on('slider.valueCalced', function (event, value) {
-        input.value = value;
-    });
 
     input.oninput = function() {
         const value = parseInt(input.value)
@@ -56,4 +73,8 @@ $(document).ready(() => {
         }
         mySlider.data('slider').update(value);
     };
+
+    mySlider.data('slider').hideFrom(false);
+    mySlider.data('slider').changeStep(10);
+
 })

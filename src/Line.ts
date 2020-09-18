@@ -2,28 +2,29 @@ import {Observable} from './Observable'
 import {LineClicked} from './Event'
 
 export class Line extends Observable {
-    sliderLine: Element
+    sliderLine: HTMLElement
 
-    constructor() {
+    constructor(node: HTMLElement) {
         super();
+        this.sliderLine = node;
     }
-    drawHorizontalLine(node: Element) {
-        node.innerHTML = `<div class="slider__line"></div>`;
-        this.sliderLine = node.querySelector('.slider__line');
+    drawHorizontalLine() {
         this.sliderLine.classList.add('slider__line_horizontal');
     }
-    drawVerticalLine(node: Element) {
-        node.innerHTML = `<div class="slider__line"></div>`;
-        this.sliderLine = node.querySelector('.slider__line');
+    drawVerticalLine() {
         this.sliderLine.classList.add('slider__line_vertical');
     }
 
     addLineClickOption() {
-        const self = this;
+        const that = this;
         this.sliderLine.addEventListener('click', function(event) {
-            let position = event.clientX - self.sliderLine.getBoundingClientRect().left;
+            let position = event.clientX - that.sliderLine.getBoundingClientRect().left;
             const lineClicked = new LineClicked(position);
-            self.notifyObservers(lineClicked);
+            that.notifyObservers(lineClicked);
         })
+    }
+
+    drawProgressBar(progressBarNode: HTMLElement, position: number) {
+        progressBarNode.style.width = position + 'px';
     }
 }

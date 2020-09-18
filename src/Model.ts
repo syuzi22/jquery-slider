@@ -1,5 +1,5 @@
 import {Observable} from './Observable'
-import { CalcedValue, AdjustedValue } from './Event'
+import { CalcedValue, calcedAdjustedValue } from './Event'
 
 export class Model extends Observable {
     private sliderWidth: number;
@@ -10,7 +10,7 @@ export class Model extends Observable {
     constructor(options: object) {
         super();
         this.options = options;
-        this.value = options.from;
+        this.value = this.options.from;
         // this.type = options.type;
         // this.min = options.min;
         // this.max = options.max;
@@ -24,27 +24,25 @@ export class Model extends Observable {
         // this.hide_min_max = options.hide_min_max;
         // this.hide_from_to = options.hide_from_to;
     }
-    updateSliderWidth(val: number) {
-        this.sliderWidth = val; //290
-    }
 
     calcValue(position?: number) {
         if (position) {
             this.value = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
-        }else {
-            this.value = this.options.from;
+        } else {
+            this.value = Math.ceil(this.options.from / this.options.step) * this.options.step;
         }
         const calcedValue = new CalcedValue(this.value);
         this.notifyObservers(calcedValue)
+        this.calcAdjustedValue();
     }
 
     calcAdjustedValue() {
         this.adjustedValue = Math.round(this.value * ((this.sliderWidth / (this.options.max - this.options.min)) * this.options.step) / this.options.step);
-        const adjustedValue = new AdjustedValue(this.adjustedValue);
-        this.notifyObservers(adjustedValue);
+        const adjustedValueCalced = new calcedAdjustedValue(this.adjustedValue);
+        this.notifyObservers(adjustedValueCalced);
     }
 
-    updateValue(value) {
+    updateValue(value: number) {
         const that = this;
         if (this.timerId) {
             clearTimeout(this.timerId);
@@ -60,7 +58,16 @@ export class Model extends Observable {
             that.notifyObservers(calcedValue);
             that.calcAdjustedValue();
         }, 1000);
+    }
 
+
+
+    updateSliderWidth(val: number) {
+        this.sliderWidth = val; //290
+    }
+
+    updateStep(value: number) {
+        this.options.step = value;
     }
 
 
