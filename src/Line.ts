@@ -3,6 +3,9 @@ import {LineClicked} from './Event'
 
 export class Line extends Observable {
     sliderLine: HTMLElement
+    progressBarNode: HTMLElement
+    progressBarNodeLeftPos: number
+    progressBarNodeRightPos: number
 
     constructor(node: HTMLElement) {
         super();
@@ -10,9 +13,6 @@ export class Line extends Observable {
     }
     drawHorizontalLine() {
         this.sliderLine.classList.add('slider__line_horizontal');
-    }
-    drawVerticalLine() {
-        this.sliderLine.classList.add('slider__line_vertical');
     }
 
     addLineClickOption() {
@@ -24,7 +24,29 @@ export class Line extends Observable {
         })
     }
 
-    drawProgressBar(progressBarNode: HTMLElement, position: number) {
-        progressBarNode.style.width = position + 'px';
+    addProgressBar(node: HTMLElement) {
+        this.progressBarNode = node;
     }
+
+    setProgressBarLeftPos(position: number) {
+        this.progressBarNodeLeftPos = position;
+        this.updateProgressBarWidth();
+    }
+
+    setProgressBarRightPos(position: number) {
+        this.progressBarNodeRightPos = position;
+        this.updateProgressBarWidth();
+    }
+
+    updateProgressBarWidth(position?: number) {
+        if (position) {
+            this.progressBarNode.style.width =  position + 'px';
+        }else {
+            this.progressBarNode.style.left = this.progressBarNodeLeftPos + 'px';
+            this.progressBarNode.style.width = this.progressBarNodeRightPos - this.progressBarNodeLeftPos + 'px';
+        }
+    }
+
+
+
 }

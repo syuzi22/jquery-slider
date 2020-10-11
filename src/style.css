@@ -17,35 +17,54 @@
     border-radius: 5px;
 }
 
-.slider__line_vertical {
+/* .slider__line_vertical {
     width: 10px;
     height: 300px;
-  }
+  } */
 
 .slider__line_horizontal{
   height: 10px;
 }
 
-.slider__thumb {
+.slider__thumb-from {
   position: absolute;
   border-radius: 3px;
   background: blue;
   cursor: pointer;
 }
 
-.slider__thumb_vertical {
+.slider__thumb-to {
+  position: absolute;
+  border-radius: 3px;
+  background: blue;
+  cursor: pointer;
+  right: 0;
+}
+
+/* .slider__thumb_vertical {
   width: 20px;
   height: 10px;
   left: -5px;
+} */
+
+.slider__thumbfrom_horizontal {
+  width: 10px;
+  height: 20px;
+  top: -5px;
 }
 
-.slider__thumb_horizontal {
+.slider__thumbto_horizontal {
   width: 10px;
   height: 20px;
   top: -5px;
 }
 
 .slider__from {
+  margin-top:-20px;
+  user-select: none;
+}
+
+.slider__to {
   margin-top:-20px;
   user-select: none;
 }
@@ -57,8 +76,7 @@
 }
 
 .slider__progressbar {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  background-color: green;
+  position: relative;
   height: 10px;
+  background-color: green;
 }

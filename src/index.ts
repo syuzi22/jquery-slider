@@ -60,9 +60,11 @@ $(document).ready(() => {
             input.value = value;
         })
         .slider({
-            type: 'single',
+            type: 'double',
             step: 20,
-            from: 10 // если from не соответствует step, то значение будет скорректировано с учетом шага
+            from: 20,
+            to: 80
+            // from: 10 // если from не соответствует step, то значение будет скорректировано с учетом шага
         });
 
 

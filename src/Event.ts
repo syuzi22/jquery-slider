@@ -14,6 +14,7 @@ export class CalcedSliderWidth extends SliderEvent {
 }
 
 //бегунок изменил положение вследствие перетаскивания его мышью
+
 export class ThumbChangedPosition extends SliderEvent{
     position: number
     constructor(pos: number) {
@@ -21,6 +22,24 @@ export class ThumbChangedPosition extends SliderEvent{
         this.position = pos;
     }
 }
+
+//////////////
+export class ThumbFromChangedPosition extends SliderEvent{
+    position: number
+    constructor(pos: number) {
+        super();
+        this.position = pos;
+    }
+}
+////////////////
+export class ThumbToChangedPosition extends SliderEvent{
+    position: number
+    constructor(pos: number) {
+        super();
+        this.position = pos;
+    }
+}
+
 
 //рассчитано текущее значение слайдера для отображения пользователям над бегунком
 export class CalcedValue extends SliderEvent{
@@ -31,7 +50,25 @@ export class CalcedValue extends SliderEvent{
     }
 }
 
+////////////////
+export class CalcedFromValue extends SliderEvent{
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+/////////////////
+export class CalcedToValue extends SliderEvent{
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+
 //на основе текущего значения рассчитано положение, которое должен занять бегунок
+
 export class calcedAdjustedValue extends SliderEvent {
     value: number
     constructor(val: number) {
@@ -40,18 +77,27 @@ export class calcedAdjustedValue extends SliderEvent {
     }
 }
 
+export class calcedAdjustedFromValue extends SliderEvent {
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+export class calcedAdjustedToValue extends SliderEvent {
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+
+
 //произошел клик по слайдеру
 export class LineClicked extends SliderEvent {
     position: number
     constructor(val: number) {
         super();
         this.position = val;
-    }
-}
-
-//отжата кнопка мыши
-export class MouseUpMessage extends SliderEvent {
-    constructor() {
-        super();
     }
 }

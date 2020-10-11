@@ -13,11 +13,14 @@ export class MainView implements VeiwInterface {
         return this.node.innerHTML = `
             <div class="slider__wrap">
                 <div class="slider__line">
-                    <div class="slider__progressbar">
-                        <div class="slider__thumb">
+                        <div class="slider__progressbar">
+                        </div>
+                        <div class="slider__thumb-from">
                             <div class="slider__from"></div>
                         </div>
-                    </div>
+                        <div class="slider__thumb-to">
+                            <div class="slider__to"></div>
+                        </div>
                 </div>
                 <div class="slider__minmax">
                     <div class="slider__min"></div>
@@ -30,12 +33,20 @@ export class MainView implements VeiwInterface {
         return this.node.querySelector('.slider__line');
     }
 
-    getThumbNode() : HTMLElement {
-        return this.node.querySelector('.slider__thumb');
+    getThumbFromNode() : HTMLElement {
+        return this.node.querySelector('.slider__thumb-from');
+    }
+
+    getThumbToNode() : HTMLElement {
+        return this.node.querySelector('.slider__thumb-to');
     }
 
     getFromNode() : HTMLElement {
         return this.node.querySelector('.slider__from');
+    }
+
+    getToNode() : HTMLElement {
+        return this.node.querySelector('.slider__to');
     }
 
     getMinNode() : HTMLElement {
@@ -66,13 +77,4 @@ export class MainView implements VeiwInterface {
         let node = this.getMaxNode();
         node.textContent = value;
     }
-
-    setAdjustedValue(value) {
-        this.adjusted = value;
-    }
-
-    getAdjustedValue() {
-        return this.adjusted;
-    }
-
 }

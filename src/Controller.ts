@@ -1,87 +1,103 @@
 import {Model} from './Model'
 import {Line} from './Line'
 import {Thumb} from './Thumb'
+import {DoubleThumb} from './DoubleThumb'
 import {Options} from './Options'
-import { ThumbChangedPosition, CalcedValue, calcedAdjustedValue, CalcedSliderWidth, LineClicked, MouseUpMessage } from './Event'
+// TODO import {*} from './Event' // ?
+import { ThumbChangedPosition, ThumbFromChangedPosition, ThumbToChangedPosition, CalcedValue, CalcedFromValue, CalcedToValue, calcedAdjustedValue, calcedAdjustedFromValue, calcedAdjustedToValue, CalcedSliderWidth, LineClicked, MouseUpMessage } from './Event'
 import { MainView } from './MainView'
 
 export class Controller {
     private model: Model
     private line: Line
     private thumb: Thumb
+    private doubleThumb: DoubleThumb
     private view: MainView
 
     options: object
     node: HTMLElement
     sliderWrap: HTMLElement
 
-    constructor() { }
+    constructor() {}
 
     init (options: Options, node: HTMLElement): void {
         this.options = options
         this.node = node
-
         this.model = new Model(this.options);
         this.model.addObserver(this)
-
         this.view = new MainView(this.node);
         this.view.render();
-
         this.line = new Line(this.view.getLineNode());
         this.line.addObserver(this)
-
-        this.thumb = new Thumb(this.view.getThumbNode());
-        this.thumb.addObserver(this)
-
         this.line.drawHorizontalLine();
-        this.line.addLineClickOption();
-
+        this.line.addProgressBar(this.view.getProgressBarNode());
         this.view.setMin(this.options.min);
         this.view.setMax(this.options.max);
 
-        this.thumb.drawHorizontal();
-        this.thumb.addHorizontalMovement(this.view.getLineNode());
+                ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
+                this.thumb = new Thumb(this.view.getThumbToNode());
+                this.thumb.addObserver(this)
+                this.thumb.drawHorizontal();
+                this.thumb.addHorizontalMovement(this.view.getLineNode());
+                this.model.calcValue();
+                this.line.addLineClickOption();
+                ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
 
-        this.model.calcValue();
+                ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
+                // this.doubleThumb = new DoubleThumb(this.view.getThumbFromNode(), this.view.getThumbToNode());
+                // this.doubleThumb.addObserver(this);
+                // this.doubleThumb.drawHorizontal();
+                // this.doubleThumb.addHorizontalMovement(this.view.getLineNode());
+
+                // this.model.calcFromValue();
+                // this.model.calcToValue();
+                ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
     }
 
 
     //метод для получения сообщений от Model и View
     onEvent (obj: object) {
 
-        //если во View рассчитана ширина слайдера, сохрани ее в модели для последующего использования
+        //во View рассчитана ширина слайдера, сохраним ее в модели для последующего использования
         if (obj instanceof CalcedSliderWidth) {
             this.model.updateSliderWidth(obj.value);
 
-        //если изменилось положение бегунка во View при перетаскивании мышью, пусть Model рассчитает
-        //значение слайдера для отображения и позицию, куда должен попасть бегунок с учетом шага слайдера,
-        //когда пользователь отпустит кнопку мыши
-        } else if (obj instanceof ThumbChangedPosition) {
-            this.model.calcValue(obj.position);
-            this.thumb.moveThumbOn(obj.position)
-            this.line.drawProgressBar(this.view.getProgressBarNode(), obj.position);
+                ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
+                // изменилось положение бегунка во View, Model рассчитает значение для отображения и позицию с учетом шага
+                } else if (obj instanceof ThumbChangedPosition) {
+                    this.model.calcValue(obj.position);
+                // рассчитано значение слайдера в Model, передаем его во View и установим trigger для внешнего кода
+                } else if (obj instanceof CalcedValue) {
+                    this.view.setValue(this.view.getToNode(), obj.value);
+                    $(this.node).trigger('slider.valueCalced', [obj.value])
+                // рассчитана позиция бегунка с учетом шага, передаем ее во View
+                } else if (obj instanceof calcedAdjustedValue) {
+                    this.thumb.moveThumbOn(obj.value);
+                    this.line.updateProgressBarWidth(obj.value)
+                // клик по слайдеру, Model рассчитает какому значению он соответствует и куда переместить бегунок
+                } else if (obj instanceof LineClicked) {
+                    this.model.calcValue(obj.position);
+                }
+                ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
 
-        //если рассчитано значение слайдера в Model, передай его для отображения во View и установи trigger
-        //для внешнего кода
-        } else if (obj instanceof CalcedValue) {
-            this.view.setValue(this.view.getFromNode(), obj.value);
-            $(this.node).trigger('slider.valueCalced', [obj.value])
+                ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
+                // } else if (obj instanceof ThumbFromChangedPosition) {
+                //     this.model.calcFromValue(obj.position);
+                // } else if (obj instanceof ThumbToChangedPosition) {
+                //     this.model.calcToValue(obj.position);
+                // } else if (obj instanceof CalcedFromValue) {
+                //     this.view.setValue(this.view.getFromNode(), obj.value);
+                // } else if (obj instanceof CalcedToValue) {
+                //     this.view.setValue(this.view.getToNode(), obj.value);
+                // } else if (obj instanceof calcedAdjustedFromValue) {
+                //     this.doubleThumb.moveThumbFromOn(obj.value);
+                //     this.line.setProgressBarLeftPos(obj.value);
+                // } else if (obj instanceof calcedAdjustedToValue) {
+                //     this.doubleThumb.moveThumbToOn(obj.value);
+                //     this.line.setProgressBarRightPos(obj.value)
+                // }
+                ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
 
-        //если в Model рассчитано какое положение должен занять бегунок, установи его во View
-        } else if (obj instanceof calcedAdjustedValue) {
-            this.view.setAdjustedValue(obj.value);
-            this.thumb.moveThumbOn(obj.value)
-            this.line.drawProgressBar(this.view.getProgressBarNode(), obj.value);
-
-        //если произошел клик на линии слайдера во View, то в Model рассчитай какому значению он
-        //соответствует и куда переместить бегунок
-        } else if (obj instanceof LineClicked) {
-            this.model.calcValue(obj.position);
-
-        } else if (obj instanceof MouseUpMessage) {
-            this.thumb.moveThumbOn(this.view.getAdjustedValue())
-            this.line.drawProgressBar(this.view.getProgressBarNode(), this.view.getAdjustedValue());
-        }
     }
 
 
@@ -100,7 +116,7 @@ export class Controller {
     //метод для смены шага
     changeStep(step: number) {
         this.model.updateStep(parseInt(step, 10));
-        this.model.calcValue();
+        // this.model.calcValue();
     }
 
 }

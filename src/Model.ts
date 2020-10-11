@@ -1,77 +1,112 @@
 import {Observable} from './Observable'
-import { CalcedValue, calcedAdjustedValue } from './Event'
+import { CalcedValue, CalcedFromValue, CalcedToValue, calcedAdjustedValue, calcedAdjustedFromValue, calcedAdjustedToValue } from './Event'
 
 export class Model extends Observable {
     private sliderWidth: number;
     private value: number = 0;
+    private fromValue: number = 0;
+    private toValue: number = 0;
     private adjustedValue: number = 0;
+    private adjustedFromValue: number = 0;
+    private adjustedToValue: number = 0;
     options: object;
 
     constructor(options: object) {
         super();
         this.options = options;
-        this.value = this.options.from;
-        // this.type = options.type;
-        // this.min = options.min;
-        // this.max = options.max;
-        // this.from = options.from;
-        // this.to = options.to;
-        // this.step = options.step;
-        // this.items = options.items;
-        // this.grid = options.grid;
-        // this.progressBar = options.progressBar;
-        // this.orientation = options.orientation;
-        // this.hide_min_max = options.hide_min_max;
-        // this.hide_from_to = options.hide_from_to;
     }
-
-    calcValue(position?: number) {
-        if (position) {
-            this.value = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
-        } else {
-            this.value = Math.ceil(this.options.from / this.options.step) * this.options.step;
-        }
-        const calcedValue = new CalcedValue(this.value);
-        this.notifyObservers(calcedValue)
-        this.calcAdjustedValue();
-    }
-
-    calcAdjustedValue() {
-        this.adjustedValue = Math.round(this.value * ((this.sliderWidth / (this.options.max - this.options.min)) * this.options.step) / this.options.step);
-        const adjustedValueCalced = new calcedAdjustedValue(this.adjustedValue);
-        this.notifyObservers(adjustedValueCalced);
-    }
-
-    updateValue(value: number) {
-        const that = this;
-        if (this.timerId) {
-            clearTimeout(this.timerId);
-        }
-        this.value = Math.round(value / this.options.step) * this.options.step;
-        if (this.value > this.options.max) {
-            this.value = this.options.min;
-        }else if (this.value < this.options.min) {
-            this.value = this.options.min;
-        }
-        const calcedValue = new CalcedValue(this.value);
-        this.timerId = setTimeout(function() {
-            that.notifyObservers(calcedValue);
-            that.calcAdjustedValue();
-        }, 1000);
-    }
-
-
 
     updateSliderWidth(val: number) {
-        this.sliderWidth = val; //290
+        this.sliderWidth = val;
     }
+
+            ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
+            calcValue(position?: number) {
+                if (position) {
+                    this.value = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+                } else {
+                    this.value = Math.ceil(this.options.from / this.options.step) * this.options.step;
+                }
+                const calcedValue = new CalcedValue(this.value);
+                this.notifyObservers(calcedValue)
+                this.calcAdjustedValue();
+            }
+
+            calcAdjustedValue() {
+                this.adjustedValue = Math.round(this.value * ((this.sliderWidth / (this.options.max - this.options.min)) * this.options.step) / this.options.step);
+                const adjustedValueCalced = new calcedAdjustedValue(this.adjustedValue);
+                this.notifyObservers(adjustedValueCalced);
+            }
+            ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
+
+            ////////////////////////////DOUBLE////////////////////////////////////////////////////////////////////////////////////////
+            // calcFromValue(position?: number) {
+            //     if (position) {
+            //         this.fromValue = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+            //     } else {
+            //         this.fromValue = Math.ceil(this.options.from / this.options.step) * this.options.step;
+            //     }
+            //     if (this.fromValue === this.toValue) {
+            //         this.fromValue = this.fromValue - 10;
+            //     }
+            //     const calcedFromValue = new CalcedFromValue(this.fromValue);
+            //     this.notifyObservers(calcedFromValue)
+            //     this.calcAdjustedFromValue();
+            // }
+
+            // calcToValue(position?: number) {
+            //     if (position) {
+            //         this.toValue  = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+            //     } else {
+            //         this.toValue  = Math.ceil(this.options.to / this.options.step) * this.options.step;
+            //     }
+            //     if (this.toValue === this.fromValue) {
+            //         this.toValue = this.toValue + 10;
+            //     }
+            //     const calcedToValue = new CalcedToValue(this.toValue);
+            //     this.notifyObservers(calcedToValue)
+            //     this.calcAdjustedToValue();
+            // }
+
+            // calcAdjustedFromValue() {
+            //     this.adjustedFromValue = Math.round(this.fromValue * ((this.sliderWidth / (this.options.max - this.options.min)) * this.options.step) / this.options.step);
+            //     const adjustedFromValueCalced = new calcedAdjustedFromValue(this.adjustedFromValue);
+            //     this.notifyObservers(adjustedFromValueCalced);
+            // }
+
+            // calcAdjustedToValue() {
+            //     this.adjustedToValue = Math.round(this.toValue * ((this.sliderWidth / (this.options.max - this.options.min)) * this.options.step) / this.options.step);
+            //     const adjustedToValueCalced = new calcedAdjustedToValue(this.adjustedToValue);
+            //     this.notifyObservers(adjustedToValueCalced);
+            // }
+
+            ////////////////////////////DOUBLE////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+    // updateValue(value: number) {
+    //     const that = this;
+    //     if (this.timerId) {
+    //         clearTimeout(this.timerId);
+    //     }
+    //     this.value = Math.round(value / this.options.step) * this.options.step;
+    //     if (this.value > this.options.max) {
+    //         this.value = this.options.min;
+    //     }else if (this.value < this.options.min) {
+    //         this.value = this.options.min;
+    //     }
+    //     const calcedValue = new CalcedValue(this.value);
+    //     this.timerId = setTimeout(function() {
+    //         that.notifyObservers(calcedValue);
+    //         that.calcAdjustedValue();
+    //     }, 1000);
+    // }
+
 
     updateStep(value: number) {
         this.options.step = value;
     }
-
-
-
 
 
 }
