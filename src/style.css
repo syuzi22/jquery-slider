@@ -70,6 +70,7 @@
 }
 
 .slider__minmax {
+  user-select: none;
   display: flex;
   justify-content: space-between;
   padding-top: 5px;
@@ -80,3 +81,30 @@
   height: 10px;
   background-color: green;
 }
+
+.slider__item {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin-top:-15px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background-color: blueviolet;
+  position: absolute;
+}
+
+.slider__item_selected {
+  width: 30px;
+  height: 30px;
+  margin-top: -20px;
+  background-color: red;
+}
+
+.slider__item-name {
+  margin-top: -25px;
+}
+
+.slider__item-name_selected {
+  font-size: 25px;
+}
+

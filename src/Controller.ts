@@ -4,8 +4,9 @@ import {Thumb} from './Thumb'
 import {DoubleThumb} from './DoubleThumb'
 import {Options} from './Options'
 // TODO import {*} from './Event' // ?
-import { ThumbChangedPosition, ThumbFromChangedPosition, ThumbToChangedPosition, CalcedValue, CalcedFromValue, CalcedToValue, calcedAdjustedValue, calcedAdjustedFromValue, calcedAdjustedToValue, CalcedSliderWidth, LineClicked, MouseUpMessage } from './Event'
+import { ThumbChangedPosition, ThumbFromChangedPosition, ThumbToChangedPosition, CalcedValue, CalcedFromValue, CalcedToValue, calcedAdjustedValue, calcedAdjustedFromValue, calcedAdjustedToValue, CalcedSliderWidth, LineClicked, CalcedItemsStep, ItemClicked } from './Event'
 import { MainView } from './MainView'
+import { Items } from './Items'
 
 export class Controller {
     private model: Model
@@ -13,6 +14,7 @@ export class Controller {
     private thumb: Thumb
     private doubleThumb: DoubleThumb
     private view: MainView
+    private itemsView: Items
 
     options: object
     node: HTMLElement
@@ -34,24 +36,42 @@ export class Controller {
         this.view.setMin(this.options.min);
         this.view.setMax(this.options.max);
 
-                ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
-                this.thumb = new Thumb(this.view.getThumbToNode());
-                this.thumb.addObserver(this)
-                this.thumb.drawHorizontal();
-                this.thumb.addHorizontalMovement(this.view.getLineNode());
-                this.model.calcValue();
-                this.line.addLineClickOption();
-                ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
+        if (this.options.type === 'double') {
+            ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
+            this.doubleThumb = new DoubleThumb(this.view.getThumbFromNode(), this.view.getThumbToNode());
+            this.doubleThumb.addObserver(this);
+            this.doubleThumb.drawHorizontal();
+            this.doubleThumb.addHorizontalMovement(this.view.getLineNode());
 
-                ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
-                // this.doubleThumb = new DoubleThumb(this.view.getThumbFromNode(), this.view.getThumbToNode());
-                // this.doubleThumb.addObserver(this);
-                // this.doubleThumb.drawHorizontal();
-                // this.doubleThumb.addHorizontalMovement(this.view.getLineNode());
+            this.model.calcFromValue();
+            this.model.calcToValue();
+            ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
 
-                // this.model.calcFromValue();
-                // this.model.calcToValue();
-                ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
+            ////////////////////////////ITEMS///////////////////////////////////////////////////////////////
+        } else if (this.options.type === 'items') {
+
+            this.itemsView = new Items(this.view.getLineNode());
+            this.itemsView.addObserver(this);
+
+            // this.view.getProgressBarNode().style.display = 'none';
+            this.view.getMaxNode().style.display = 'none';
+            this.view.getMinNode().style.display = 'none';
+            this.model.updateSliderWidth(this.line.getLineWidth());
+            this.model.calcItemsStep(this.options.items.length - 1);
+
+            this.line.updateProgressBarWidth(0);
+            ////////////////////////////ITEMS///////////////////////////////////////////////////////////////
+
+        } else {
+            ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
+            this.thumb = new Thumb(this.view.getThumbToNode());
+            this.thumb.addObserver(this)
+            this.thumb.drawHorizontal();
+            this.thumb.addHorizontalMovement(this.view.getLineNode());
+            this.model.calcValue();
+            this.line.addLineClickOption();
+            ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
+        }
     }
 
 
@@ -81,22 +101,30 @@ export class Controller {
                 ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
 
                 ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
-                // } else if (obj instanceof ThumbFromChangedPosition) {
-                //     this.model.calcFromValue(obj.position);
-                // } else if (obj instanceof ThumbToChangedPosition) {
-                //     this.model.calcToValue(obj.position);
-                // } else if (obj instanceof CalcedFromValue) {
-                //     this.view.setValue(this.view.getFromNode(), obj.value);
-                // } else if (obj instanceof CalcedToValue) {
-                //     this.view.setValue(this.view.getToNode(), obj.value);
-                // } else if (obj instanceof calcedAdjustedFromValue) {
-                //     this.doubleThumb.moveThumbFromOn(obj.value);
-                //     this.line.setProgressBarLeftPos(obj.value);
-                // } else if (obj instanceof calcedAdjustedToValue) {
-                //     this.doubleThumb.moveThumbToOn(obj.value);
-                //     this.line.setProgressBarRightPos(obj.value)
-                // }
+                  else if (obj instanceof ThumbFromChangedPosition) {
+                    this.model.calcFromValue(obj.position);
+                } else if (obj instanceof ThumbToChangedPosition) {
+                    this.model.calcToValue(obj.position);
+                } else if (obj instanceof CalcedFromValue) {
+                    this.view.setValue(this.view.getFromNode(), obj.value);
+                } else if (obj instanceof CalcedToValue) {
+                    this.view.setValue(this.view.getToNode(), obj.value);
+                } else if (obj instanceof calcedAdjustedFromValue) {
+                    this.doubleThumb.moveThumbFromOn(obj.value);
+                    this.line.setProgressBarLeftPos(obj.value);
+                } else if (obj instanceof calcedAdjustedToValue) {
+                    this.doubleThumb.moveThumbToOn(obj.value);
+                    this.line.setProgressBarRightPos(obj.value)
+                }
                 ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
+
+                ////////////////////////////ITEMS///////////////////////////////////////////////////////////////
+                  else if (obj instanceof CalcedItemsStep) {
+                    this.itemsView.addItemsToLine(this.options.items, obj.value);
+                } else if (obj instanceof ItemClicked) {
+                    this.line.updateProgressBarWidth(obj.value);
+                }
+                ////////////////////////////ITEMS///////////////////////////////////////////////////////////////
 
     }
 
@@ -107,10 +135,15 @@ export class Controller {
     updateValue(value: number) {
         this.model.updateValue(value)
     }
-    //метод для скрытия значения над бегунком (единственным или "от")
-    hideValue(hide: boolean) {
+    //метод для скрытия значения над бегунком (единственным или "от" и "до")
+    hideValueFrom(hide: boolean) {
         if (hide) {
             this.view.hideFrom(this.view.getFromNode());
+        }
+    }
+    hideValueTo(hide: boolean) {
+        if (hide) {
+            this.view.hideTo(this.view.getToNode());
         }
     }
     //метод для смены шага

@@ -35,8 +35,8 @@ export class Options {
         this.max = settings.max || 100;
         this.from = settings.from || 0;
         this.to = settings.to || 100;
-        this.step = settings.step || 10;
-        this.items = settings.items || {};
+        this.step = settings.step || 1;
+        this.items = settings.items || [];
         this.grid = settings.grid || false;
         this.progressBar = settings.progressBar || true;
         this.orientation = settings.orientation || 'horizontal';

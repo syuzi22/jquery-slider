@@ -101,3 +101,22 @@ export class LineClicked extends SliderEvent {
         this.position = val;
     }
 }
+
+// рассчитан шаг для вида слайдера Items
+
+export class CalcedItemsStep extends SliderEvent {
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+// клик по item
+
+export class ItemClicked extends SliderEvent {
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}

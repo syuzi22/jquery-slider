@@ -1,5 +1,5 @@
 import {Observable} from './Observable'
-import { ThumbChangedPosition, CalcedSliderWidth, MouseUpMessage } from './Event'
+import { ThumbChangedPosition, CalcedSliderWidth } from './Event'
 
 export class Thumb extends Observable {
     thumb:HTMLElement;
@@ -31,9 +31,9 @@ export class Thumb extends Observable {
 
         thumb.onpointermove = function (event) {
             let newLeft = event.clientX - shiftX - line.getBoundingClientRect().left;
-            if (newLeft < 0) {newLeft = 0;}
-            let rightEdge = line.offsetWidth - thumb.offsetWidth;
-            if (newLeft > rightEdge) {newLeft = rightEdge;}
+            // if (newLeft < 0) {newLeft = 0;}
+            // let rightEdge = line.offsetWidth - thumb.offsetWidth;
+            // if (newLeft > rightEdge) {newLeft = rightEdge;}
 
             const thumbFromChangedPos = new ThumbChangedPosition(newLeft);
             self.notifyObservers(thumbFromChangedPos);

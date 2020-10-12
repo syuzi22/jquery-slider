@@ -30,7 +30,17 @@ $.fn.slider = function (settings: object) : JQuery {
             if (!controllers.has(node)) {
                 return;
             }
-            controllers.get(node).hideValue(value);
+            controllers.get(node).hideValueFrom(value);
+        });
+    };
+
+    this.hideTo = function (value: boolean) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).hideValueTo(value);
         });
     };
 
@@ -60,11 +70,18 @@ $(document).ready(() => {
             input.value = value;
         })
         .slider({
-            type: 'double',
-            step: 20,
-            from: 20,
-            to: 80
-            // from: 10 // если from не соответствует step, то значение будет скорректировано с учетом шага
+            type: 'single',
+            // min: 10,
+            // max: 90,
+            // from: 20, // если single, то этот параметр не учитывается
+            // to: 80,
+            // step: 20,
+            items: ['junior', 'middle', 'senior'],
+            // grid: false,
+            // progressBar: true,
+            // orientation: 'horizontal',
+            // hide_min_max: false,
+            // hide_from_to: false
         });
 
 
@@ -77,6 +94,7 @@ $(document).ready(() => {
     };
 
     mySlider.data('slider').hideFrom(false);
-    mySlider.data('slider').changeStep(10);
+    mySlider.data('slider').hideTo(false);
+    // mySlider.data('slider').changeStep(10);
 
 })

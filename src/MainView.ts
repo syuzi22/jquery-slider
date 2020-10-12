@@ -64,9 +64,14 @@ export class MainView implements VeiwInterface {
         node.textContent = value;
     }
 
+    ///////
     hideFrom(node: HTMLElement) {
         node.style.display = 'none';
     }
+    hideTo(node: HTMLElement) {
+        node.style.display = 'none';
+    }
+    /////////
 
     setMin(value) : void {
         let node = this.getMinNode();
@@ -77,4 +82,5 @@ export class MainView implements VeiwInterface {
         let node = this.getMaxNode();
         node.textContent = value;
     }
+
 }

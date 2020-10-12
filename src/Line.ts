@@ -39,12 +39,16 @@ export class Line extends Observable {
     }
 
     updateProgressBarWidth(position?: number) {
-        if (position) {
+        if (position >= 0) {
             this.progressBarNode.style.width =  position + 'px';
         }else {
             this.progressBarNode.style.left = this.progressBarNodeLeftPos + 'px';
             this.progressBarNode.style.width = this.progressBarNodeRightPos - this.progressBarNodeLeftPos + 'px';
         }
+    }
+
+    getLineWidth() {
+        return this.sliderLine.offsetWidth;
     }
 
 
