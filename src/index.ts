@@ -70,12 +70,12 @@ $(document).ready(() => {
             input.value = value;
         })
         .slider({
-            type: 'single',
-            // min: 10,
-            // max: 90,
-            // from: 20, // если single, то этот параметр не учитывается
-            // to: 80,
-            // step: 20,
+            type: 'items',
+            min: 10,
+            max: 90,
+            from: 10, // если single, то этот параметр не учитывается
+            to: 80,
+            step: 10,
             items: ['junior', 'middle', 'senior'],
             // grid: false,
             // progressBar: true,

@@ -28,7 +28,7 @@ export class Model extends Observable {
             position = this.sliderWidth;
         }
         if (position) {
-            this.value = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+            this.value = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
         } else {
             this.value = Math.ceil(this.options.to / this.options.step) * this.options.step;
         }
@@ -39,7 +39,9 @@ export class Model extends Observable {
     }
 
     calcAdjustedValue() {
-        this.adjustedValue = Math.round(this.value * ((this.sliderWidth / (this.options.max - this.options.min)) * this.options.step) / this.options.step);
+        let oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
+        let diff = this.value - this.options.min;
+        this.adjustedValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
         const adjustedValueCalced = new calcedAdjustedValue(this.adjustedValue);
         this.notifyObservers(adjustedValueCalced);
     }
@@ -48,7 +50,7 @@ export class Model extends Observable {
     ////////////////////////////DOUBLE////////////////////////////////////////////////////////////////////////////////////////
     calcFromValue(position?: number) {
         if (position) {
-            this.fromValue = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+            this.fromValue = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
         } else {
             this.fromValue = Math.ceil(this.options.from / this.options.step) * this.options.step;
         }
@@ -59,7 +61,7 @@ export class Model extends Observable {
 
     calcToValue(position?: number) {
         if (position) {
-            this.toValue  = Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+            this.toValue  = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
         } else {
             this.toValue  = Math.ceil(this.options.to / this.options.step) * this.options.step;
         }
@@ -69,13 +71,17 @@ export class Model extends Observable {
     }
 
     calcAdjustedFromValue() {
-        this.adjustedFromValue = Math.round(this.fromValue * ((this.sliderWidth / (this.options.max - this.options.min)) * this.options.step) / this.options.step);
+        let oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
+        let diff = this.fromValue - this.options.min;
+        this.adjustedFromValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
         const adjustedFromValueCalced = new calcedAdjustedFromValue(this.adjustedFromValue);
         this.notifyObservers(adjustedFromValueCalced);
     }
 
     calcAdjustedToValue() {
-        this.adjustedToValue = Math.round(this.toValue * ((this.sliderWidth / (this.options.max - this.options.min)) * this.options.step) / this.options.step);
+        let oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
+        let diff = this.toValue - this.options.min;
+        this.adjustedToValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
         const adjustedToValueCalced = new calcedAdjustedToValue(this.adjustedToValue);
         this.notifyObservers(adjustedToValueCalced);
     }
