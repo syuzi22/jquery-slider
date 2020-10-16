@@ -27,13 +27,18 @@ export class DoubleThumb extends Observable {
 
         let shiftX1: number;
         let shiftX2: number;
+
         thumbFrom.onpointerdown = function (event) {
             event.preventDefault();
             shiftX1 = event.clientX - thumbFrom.getBoundingClientRect().left;
             thumbFrom.setPointerCapture(event.pointerId);
+            thumbFrom.dataset.down = true;
         };
 
         thumbFrom.onpointermove = function (event) {
+            if (!thumbFrom.dataset.down) {
+                return;
+            }
             let newLeft = event.clientX - shiftX1 - line.getBoundingClientRect().left;
             if (newLeft < 0) {newLeft = 0;}
             let thumbToPos = line.getBoundingClientRect().right - thumbTo.getBoundingClientRect().left;
@@ -44,15 +49,23 @@ export class DoubleThumb extends Observable {
             self.notifyObservers(thumbFromChangedPos);
         };
 
+        thumbFrom.onpointerup = function(event) {
+            thumbFrom.dataset.down = false;
+        }
+
         thumbFrom.ondragstart = () => false;
 
         thumbTo.onpointerdown = function (event) {
             event.preventDefault();
             shiftX2 = event.clientX - thumbTo.getBoundingClientRect().left;
             thumbTo.setPointerCapture(event.pointerId);
+            thumbTo.dataset.down = true;
         };
 
         thumbTo.onpointermove = function (event) {
+            if (!thumbTo.dataset.down) {
+                return;
+            }
             let newLeft = event.clientX - shiftX2 - line.getBoundingClientRect().left;
             let thumbFromPos = thumbFrom.getBoundingClientRect().right - line.getBoundingClientRect().left;
             if (newLeft < thumbFromPos) {newLeft = thumbFromPos;}
@@ -62,6 +75,10 @@ export class DoubleThumb extends Observable {
             const thumbToChangedPos = new ThumbToChangedPosition(newLeft);
             self.notifyObservers(thumbToChangedPos);
         };
+
+        thumbTo.onpointerup = function(event) {
+            thumbTo.dataset.down = false;
+        }
 
         thumbTo.ondragstart = () => false;
     }

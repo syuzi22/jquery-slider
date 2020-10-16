@@ -14,6 +14,19 @@ $.fn.slider = function (settings: object) : JQuery {
     })
 
     // Public API
+
+     ////////////////////////////////////////////
+    this.changeView = function (view: string) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).changeView(view);
+        });
+    }
+     ////////////////////////////////////////////
+
     this.update = function (value: number) {
         this.each(function () {
             const node = this as HTMLElement;
@@ -24,36 +37,37 @@ $.fn.slider = function (settings: object) : JQuery {
         });
     };
 
-    this.hideFrom = function (value: boolean) {
+    this.updateFrom = function (value: number) {
         this.each(function () {
             const node = this as HTMLElement;
             if (!controllers.has(node)) {
                 return;
             }
-            controllers.get(node).hideValueFrom(value);
+            controllers.get(node).updateValueFrom(value);
         });
     };
 
-    this.hideTo = function (value: boolean) {
+    this.updateTo = function (value: number) {
         this.each(function () {
             const node = this as HTMLElement;
             if (!controllers.has(node)) {
                 return;
             }
-            controllers.get(node).hideValueTo(value);
+            controllers.get(node).updateValueTo(value);
         });
     };
 
-    this.changeStep = function (step: number) {
+    ///////////////////////////////
+
+    this.hideValue = function (value: boolean) {
         this.each(function () {
             const node = this as HTMLElement;
             if (!controllers.has(node)) {
                 return;
             }
-            controllers.get(node).changeStep(step);
+            controllers.get(node).hideValue(value);
         });
     };
-
 
     this.data('slider', this); // Save this instance for easy access from outside
     return this // jQuery object for chaining
@@ -64,16 +78,25 @@ $.fn.slider = function (settings: object) : JQuery {
 
 $(document).ready(() => {
     const input = document.querySelector('.slider-input') as HTMLInputElement;
+    const inputFrom = document.querySelector('.slider-input-from') as HTMLInputElement;
+    const inputTo = document.querySelector('.slider-input-to') as HTMLInputElement;
+
 
     const mySlider = $('.slider')
         .on('slider.valueCalced', function (event, value) {
             input.value = value;
         })
+        .on('slider.valueFromCalced', function (event, value) {
+            inputFrom.value = value;
+        })
+        .on('slider.valueToCalced', function (event, value) {
+            inputTo.value = value;
+        })
         .slider({
-            type: 'items',
+            type: 'double',
             min: 10,
             max: 90,
-            from: 10, // если single, то этот параметр не учитывается
+            from: 20, // если single, то этот параметр не учитывается
             to: 80,
             step: 10,
             items: ['junior', 'middle', 'senior'],
@@ -81,7 +104,7 @@ $(document).ready(() => {
             // progressBar: true,
             // orientation: 'horizontal',
             // hide_min_max: false,
-            // hide_from_to: false
+            // hideValue: true
         });
 
 
@@ -93,8 +116,49 @@ $(document).ready(() => {
         mySlider.data('slider').update(value);
     };
 
-    mySlider.data('slider').hideFrom(false);
-    mySlider.data('slider').hideTo(false);
-    // mySlider.data('slider').changeStep(10);
+    inputFrom.oninput = function() {
+        const value = parseInt(inputFrom.value)
+        if (isNaN(value)) {
+            return;
+        }
+        mySlider.data('slider').updateFrom(value);
+    };
+
+    inputTo.oninput = function() {
+        const value = parseInt(inputTo.value)
+        if (isNaN(value)) {
+            return;
+        }
+        mySlider.data('slider').updateTo(value);
+    };
+
+     ////////////////////////////////////////////
+    let singleBut = document.getElementById('button__single');
+    let doubleBut = document.getElementById('button__double');
+    let itemsBut = document.getElementById('button__items');
+    let hideValue = document.getElementById('button__hidevalue');
+    let showValue = document.getElementById('button__showvalue');
+
+    singleBut.onclick = function() {
+        mySlider.data('slider').changeView('single');
+    }
+    doubleBut.onclick = function(event) {
+        mySlider.data('slider').changeView('double');
+    }
+    itemsBut.onclick = function() {
+        mySlider.data('slider').changeView('items');
+    }
+
+    hideValue.onclick = function() {
+        mySlider.data('slider').hideValue(true);
+    }
+
+    showValue.onclick = function() {
+        mySlider.data('slider').hideValue(false);
+    }
+    /////////////////////////////////////////////
+
+
+
 
 })

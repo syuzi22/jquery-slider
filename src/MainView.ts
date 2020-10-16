@@ -22,6 +22,7 @@ export class MainView implements VeiwInterface {
                             <div class="slider__to"></div>
                         </div>
                 </div>
+                <div class="slider__grid"></div>
                 <div class="slider__minmax">
                     <div class="slider__min"></div>
                     <div class="slider__max"></div>
@@ -60,16 +61,24 @@ export class MainView implements VeiwInterface {
         return this.node.querySelector('.slider__progressbar');
     }
 
+    getGridNode(): HTMLElement {
+        return this.node.querySelector('.slider__grid');
+    }
+
     setValue(node: HTMLElement, value) {
         node.textContent = value;
     }
 
     ///////
-    hideFrom(node: HTMLElement) {
-        node.style.display = 'none';
-    }
-    hideTo(node: HTMLElement) {
-        node.style.display = 'none';
+    hideValue(value: boolean) {
+        if (value === true) {
+            this.getFromNode().style.display = 'none';
+            this.getToNode().style.display = 'none';
+        } else {
+            this.getFromNode().style.display = 'block';
+            this.getToNode().style.display = 'block';
+        }
+
     }
     /////////
 

@@ -12,7 +12,7 @@ export interface OptionsInterface {
     progressBar?: boolean;
     orientation?: string;
     hide_min_max?: boolean;
-    hide_from_to?: boolean;
+    hideValue?: boolean;
 }
 
 export class Options {
@@ -27,7 +27,7 @@ export class Options {
     readonly progressBar: boolean; // enable progressBar
     readonly orientation: string; //horizontal or vertical
     readonly hide_min_max: boolean; //hides min and max labels
-    readonly hide_from_to: boolean; //hides from and to label
+    hideValue: boolean; //hides from and to label
 
     constructor(settings: OptionsInterface) {
         this.type = settings.type || 'single';
@@ -41,6 +41,6 @@ export class Options {
         this.progressBar = settings.progressBar || true;
         this.orientation = settings.orientation || 'horizontal';
         this.hide_min_max = settings.hide_min_max || false;
-        this.hide_from_to = settings.hide_from_to || false;
+        this.hideValue = settings.hideValue || false;
     }
 }
