@@ -3,7 +3,6 @@ import {ItemClicked} from './Event'
 
 export class Items extends Observable {
     line: HTMLElement;
-
     constructor(node: HTMLElement) {
         super();
         this.line = node;

@@ -1,6 +1,9 @@
 import {Observable} from './Observable'
 import { ThumbChangedPosition, CalcedSliderWidth } from './Event'
 
+const PointerDownState = 'down';
+const PointerUpState = 'up';
+
 export class Thumb extends Observable {
     thumb:HTMLElement;
 
@@ -27,11 +30,11 @@ export class Thumb extends Observable {
             event.preventDefault();
             shiftX = event.clientX - thumb.getBoundingClientRect().left;
             thumb.setPointerCapture(event.pointerId);
-            thumb.dataset.down = true;
+            thumb.dataset.pointerState = PointerDownState;
         };
 
         thumb.onpointermove = function (event) {
-            if (!thumb.dataset.down) {
+            if (thumb.dataset.pointerState !== PointerDownState) {
                 return;
             }
             let newLeft = event.clientX - shiftX - line.getBoundingClientRect().left;
@@ -44,7 +47,7 @@ export class Thumb extends Observable {
         };
 
         thumb.onpointerup = function(event) {
-            thumb.dataset.down = false;
+            thumb.dataset.pointerState = PointerUpState;
         }
 
         thumb.ondragstart = () => false;

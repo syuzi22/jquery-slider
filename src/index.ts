@@ -1,6 +1,6 @@
 import './style.css'
 import {Controller} from './Controller'
-import {Options, OptionsInterface} from './Options'
+import {Options} from './Options'
 
 $.fn.slider = function (settings: object) : JQuery {
     const options = new Options(settings);
@@ -98,7 +98,7 @@ $(document).ready(() => {
             max: 90,
             from: 20, // если single, то этот параметр не учитывается
             to: 80,
-            step: 10,
+            step: 1,
             items: ['junior', 'middle', 'senior'],
             // grid: false,
             // progressBar: true,

@@ -50,7 +50,4 @@ export class Line extends Observable {
     getLineWidth() {
         return this.sliderLine.offsetWidth;
     }
-
-
-
 }

@@ -23,6 +23,7 @@ body {
     position: relative;
     background-color: burlywood;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 /* .slider__line_vertical {
@@ -135,12 +136,12 @@ button {
 
 .slider__gridlabel {
   width: 1px;
-  height: 8px;
-  background-color: grey;
-}
-
-.slider__gridlabel_num {
-  width: 1px;
   height: 12px;
   background-color: black;
 }
+
+/* .slider__gridlabel_num {
+  width: 1px;
+  height: 12px;
+  background-color: black;
+} */

@@ -1,5 +1,5 @@
 //уведомление о новом событии в слайдере
-class SliderEvent {
+export class SliderEvent {
     constructor() {
     }
 }
@@ -69,7 +69,7 @@ export class CalcedToValue extends SliderEvent{
 
 //на основе текущего значения рассчитано положение, которое должен занять бегунок
 
-export class calcedAdjustedValue extends SliderEvent {
+export class CalcedAdjustedValue extends SliderEvent {
     value: number
     constructor(val: number) {
         super();
@@ -77,14 +77,14 @@ export class calcedAdjustedValue extends SliderEvent {
     }
 }
 
-export class calcedAdjustedFromValue extends SliderEvent {
+export class CalcedAdjustedFromValue extends SliderEvent {
     value: number
     constructor(val: number) {
         super();
         this.value = val;
     }
 }
-export class calcedAdjustedToValue extends SliderEvent {
+export class CalcedAdjustedToValue extends SliderEvent {
     value: number
     constructor(val: number) {
         super();

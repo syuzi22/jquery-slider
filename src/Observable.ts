@@ -1,4 +1,5 @@
 import { Controller } from "./Controller";
+import { SliderEvent } from "./Event";
 
 export class Observable {
     observers: Controller[];
@@ -12,15 +13,9 @@ export class Observable {
     deleteObserver(observer: Controller) {
         this.observers = this.observers.filter((elem) => elem !== observer);
     }
-    // TODO: accept Event class instead of any
-    notifyObservers(data) {
+    notifyObservers(data: SliderEvent) {
         this.observers.forEach((observer) => {
             observer.onEvent(data);
         });
-        /*
-        if (data.domEvent && data.eventTarget) {
-            data.eventTarget.dispatchEvent(data.domEvent)
-        }
-        */
     }
 }

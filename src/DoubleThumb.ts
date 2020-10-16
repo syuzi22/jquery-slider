@@ -1,6 +1,9 @@
 import {Observable} from './Observable'
 import { ThumbFromChangedPosition, ThumbToChangedPosition, CalcedSliderWidth } from './Event'
 
+const PointerDownState = 'down';
+const PointerUpState = 'up';
+
 export class DoubleThumb extends Observable {
     thumbFrom:HTMLElement;
     thumbTo: HTMLElement;
@@ -32,11 +35,11 @@ export class DoubleThumb extends Observable {
             event.preventDefault();
             shiftX1 = event.clientX - thumbFrom.getBoundingClientRect().left;
             thumbFrom.setPointerCapture(event.pointerId);
-            thumbFrom.dataset.down = true;
+            thumbFrom.dataset.pointerState = PointerDownState;
         };
 
         thumbFrom.onpointermove = function (event) {
-            if (!thumbFrom.dataset.down) {
+            if (thumbFrom.dataset.pointerState !== PointerDownState) {
                 return;
             }
             let newLeft = event.clientX - shiftX1 - line.getBoundingClientRect().left;
@@ -50,7 +53,7 @@ export class DoubleThumb extends Observable {
         };
 
         thumbFrom.onpointerup = function(event) {
-            thumbFrom.dataset.down = false;
+            thumbFrom.dataset.pointerState = PointerUpState;
         }
 
         thumbFrom.ondragstart = () => false;
@@ -59,11 +62,11 @@ export class DoubleThumb extends Observable {
             event.preventDefault();
             shiftX2 = event.clientX - thumbTo.getBoundingClientRect().left;
             thumbTo.setPointerCapture(event.pointerId);
-            thumbTo.dataset.down = true;
+            thumbTo.dataset.pointerState = PointerDownState;
         };
 
         thumbTo.onpointermove = function (event) {
-            if (!thumbTo.dataset.down) {
+            if (thumbTo.dataset.pointerState !== PointerDownState) {
                 return;
             }
             let newLeft = event.clientX - shiftX2 - line.getBoundingClientRect().left;
@@ -77,7 +80,7 @@ export class DoubleThumb extends Observable {
         };
 
         thumbTo.onpointerup = function(event) {
-            thumbTo.dataset.down = false;
+            thumbTo.dataset.pointerState = PointerUpState;
         }
 
         thumbTo.ondragstart = () => false;

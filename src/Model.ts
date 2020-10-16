@@ -1,6 +1,6 @@
 import {Observable} from './Observable'
-import { CalcedValue, CalcedFromValue, CalcedToValue, calcedAdjustedValue, calcedAdjustedFromValue, calcedAdjustedToValue, CalcedItemsStep } from './Event'
-import { Options } from './Options';
+import { CalcedValue, CalcedFromValue, CalcedToValue, CalcedAdjustedValue, CalcedAdjustedFromValue, CalcedAdjustedToValue, CalcedItemsStep } from './Event'
+import { Options, OptionsInterface } from './Options';
 
 export class Model extends Observable {
     private sliderWidth: number;
@@ -11,9 +11,10 @@ export class Model extends Observable {
     private adjustedFromValue: number = 0;
     private adjustedToValue: number = 0;
     private itemsStep: number = 0;
-    options: object;
+    timerId: number;
+    options: OptionsInterface;
 
-    constructor(options: object) {
+    constructor(options: OptionsInterface) {
         super();
         this.options = options;
     }
@@ -38,14 +39,12 @@ export class Model extends Observable {
         let oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
         let diff = this.value - this.options.min;
         this.adjustedValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
-        const adjustedValueCalced = new calcedAdjustedValue(this.adjustedValue);
+        const adjustedValueCalced = new CalcedAdjustedValue(this.adjustedValue);
         this.notifyObservers(adjustedValueCalced);
     }
-    ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
 
     ////////////////////////////DOUBLE////////////////////////////////////////////////////////////////////////////////////////
     calcFromValue(position?: number) {
-        // console.log('posFrom', position)
         if (position === undefined) {
             this.fromValue = Math.ceil(this.options.from / this.options.step) * this.options.step;
         } else {
@@ -57,7 +56,6 @@ export class Model extends Observable {
     }
 
     calcToValue(position?: number) {
-        // console.log('posTo', position)
         if (position === undefined) {
             this.toValue  = Math.ceil(this.options.to / this.options.step) * this.options.step;
         } else {
@@ -72,7 +70,7 @@ export class Model extends Observable {
         let oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
         let diff = this.fromValue - this.options.min;
         this.adjustedFromValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
-        const adjustedFromValueCalced = new calcedAdjustedFromValue(this.adjustedFromValue);
+        const adjustedFromValueCalced = new CalcedAdjustedFromValue(this.adjustedFromValue);
         this.notifyObservers(adjustedFromValueCalced);
     }
 
@@ -80,11 +78,9 @@ export class Model extends Observable {
         let oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
         let diff = this.toValue - this.options.min;
         this.adjustedToValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
-        const adjustedToValueCalced = new calcedAdjustedToValue(this.adjustedToValue);
+        const adjustedToValueCalced = new CalcedAdjustedToValue(this.adjustedToValue);
         this.notifyObservers(adjustedToValueCalced);
     }
-
-    ////////////////////////////DOUBLE////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////ITEMS////////////////////////////////////////////////////////////////////////////////////////
     calcItemsStep(itemsNum: number) {
@@ -92,14 +88,12 @@ export class Model extends Observable {
         const calcedItemsStep = new CalcedItemsStep(this.itemsStep);
         this.notifyObservers(calcedItemsStep);
     }
-    ////////////////////////////ITEMS////////////////////////////////////////////////////////////////////////////////////////
-
 
     ////////////////////////API///////////////////////////////////////////////
     updateValue(value: number) {
         const that = this;
         if (this.timerId) {
-            clearTimeout(this.timerId);
+            window.clearTimeout(this.timerId);
         }
         this.value = Math.round(value / this.options.step) * this.options.step;
         if (this.value > this.options.max) {
@@ -108,7 +102,7 @@ export class Model extends Observable {
             this.value = this.options.min;
         }
         const calcedValue = new CalcedValue(this.value);
-        this.timerId = setTimeout(function() {
+        this.timerId = window.setTimeout(function() {
             that.notifyObservers(calcedValue);
             that.calcAdjustedValue();
         }, 1000);
@@ -117,7 +111,7 @@ export class Model extends Observable {
     updateValueFrom(value: number) {
         const that = this;
         if (this.timerId) {
-            clearTimeout(this.timerId);
+            window.clearTimeout(this.timerId);
         }
         this.fromValue = Math.round(value / this.options.step) * this.options.step;
         if (this.fromValue > this.toValue) {
@@ -127,7 +121,7 @@ export class Model extends Observable {
             this.fromValue = this.options.min;
         }
         const calcedFromValue = new CalcedFromValue(this.fromValue);
-        this.timerId = setTimeout(function() {
+        this.timerId = window.setTimeout(function() {
             that.notifyObservers(calcedFromValue);
             that.calcAdjustedFromValue();
         }, 1000);
@@ -136,7 +130,7 @@ export class Model extends Observable {
     updateValueTo(value: number) {
         const that = this;
         if (this.timerId) {
-            clearTimeout(this.timerId);
+            window.clearTimeout(this.timerId);
         }
         this.toValue = Math.round(value / this.options.step) * this.options.step;
         if (this.toValue < this.fromValue) {
@@ -146,14 +140,9 @@ export class Model extends Observable {
             this.toValue = this.options.max;
         }
         const calcedToValue = new CalcedToValue(this.toValue);
-        this.timerId = setTimeout(function() {
+        this.timerId = window.setTimeout(function() {
             that.notifyObservers(calcedToValue);
             that.calcAdjustedToValue();
         }, 1000);
     }
-
-
-    ////////////////////////API///////////////////////////////////////////////
-
-
 }
