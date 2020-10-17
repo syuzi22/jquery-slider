@@ -22,13 +22,24 @@ export class MainView implements VeiwInterface {
                             <div class="slider__to"></div>
                         </div>
                 </div>
-                <div class="slider__grid"></div>
                 <div class="slider__minmax">
                     <div class="slider__min"></div>
                     <div class="slider__max"></div>
                 </div>
             </div>`;
     }
+
+    ////////////////
+    renderGrid() {
+        let tmp = `<div class="slider__grid"></div>`;
+        this.getLineNode().insertAdjacentHTML('afterend', tmp);
+    }
+
+    getGridNode(): HTMLElement {
+        return this.node.querySelector('.slider__grid');
+    }
+
+    ////////////////////
 
     getLineNode() : HTMLElement {
         return this.node.querySelector('.slider__line');
@@ -61,11 +72,19 @@ export class MainView implements VeiwInterface {
         return this.node.querySelector('.slider__progressbar');
     }
 
-    getGridNode(): HTMLElement {
-        return this.node.querySelector('.slider__grid');
-    }
+
 
     setValue(node: HTMLElement, value) {
+        node.textContent = value;
+    }
+
+    setMin(value) : void {
+        let node = this.getMinNode();
+        node.textContent = value;
+    }
+
+    setMax(value) : void {
+        let node = this.getMaxNode();
         node.textContent = value;
     }
 
@@ -81,15 +100,4 @@ export class MainView implements VeiwInterface {
 
     }
     /////////
-
-    setMin(value) : void {
-        let node = this.getMinNode();
-        node.textContent = value;
-    }
-
-    setMax(value) : void {
-        let node = this.getMaxNode();
-        node.textContent = value;
-    }
-
 }

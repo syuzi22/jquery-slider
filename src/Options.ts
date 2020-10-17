@@ -13,9 +13,7 @@ export interface OptionsInterface {
     step?: number;
     items?: string[];
     grid?: boolean;
-    progressBar?: boolean;
     orientation?: string;
-    hide_min_max?: boolean;
     hideValue?: boolean;
 }
 
@@ -28,9 +26,7 @@ export class Options implements OptionsInterface {
     readonly step: number; //sliders step
     readonly items: string[]; //grid items
     readonly grid: boolean; //enable grid of values above the slider
-    readonly progressBar: boolean; // enable progressBar
     readonly orientation: string; //horizontal or vertical
-    readonly hide_min_max: boolean; //hides min and max labels
     hideValue: boolean; //hides from and to label
 
     constructor(settings: OptionsInterface) {
@@ -42,9 +38,7 @@ export class Options implements OptionsInterface {
         this.step = settings.step || 1;
         this.items = settings.items || [];
         this.grid = settings.grid || false;
-        this.progressBar = settings.progressBar || true;
         this.orientation = settings.orientation || 'horizontal';
-        this.hide_min_max = settings.hide_min_max || false;
         this.hideValue = settings.hideValue || false;
     }
 }

@@ -47,9 +47,9 @@ export class Controller {
         this.options = options;
         this.node = node
         this.setBaseOptions();
-        if (this.options.type === 'double') {
+        if (this.options.type === Type.Double) {
             this.createDouble();
-        } else if (this.options.type === 'items') {
+        } else if (this.options.type === Type.Items) {
             this.createItems();
         } else {
             this.createSingle();
@@ -67,10 +67,14 @@ export class Controller {
         this.line.addProgressBar(this.view.getProgressBarNode());
         this.view.setMin(this.options.min);
         this.view.setMax(this.options.max);
-        this.addGrid();
+        if (this.options.grid) {
+            this.addGrid();
+        }
+
     }
 
     addGrid() {
+        this.view.renderGrid();
         this.grid = new Grid(this.view.getGridNode());
         this.grid.drawLabels((this.options.max - this.options.min) / this.options.step);
     }
@@ -122,7 +126,7 @@ export class Controller {
             } else if (obj.position > this.view.getLineNode().offsetWidth - this.view.getThumbToNode().offsetWidth) {
                 obj.position = this.view.getLineNode().offsetWidth - this.view.getThumbToNode().offsetWidth;
             }
-            if (this.options.type === 'double') {
+            if (this.options.type === Type.Double) {
                 let from = this.view.getThumbFromNode().getBoundingClientRect().left - this.view.getLineNode().getBoundingClientRect().left;
                 let to = this.view.getThumbToNode().getBoundingClientRect().left - this.view.getLineNode().getBoundingClientRect().left;
                 let middle = (to + from) / 2;
@@ -224,5 +228,4 @@ export class Controller {
             this.view.hideValue(false);
         }
     }
-
 }

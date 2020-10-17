@@ -100,11 +100,9 @@ $(document).ready(() => {
             to: 80,
             step: 1,
             items: ['junior', 'middle', 'senior'],
-            // grid: false,
-            // progressBar: true,
-            // orientation: 'horizontal',
-            // hide_min_max: false,
-            // hideValue: true
+            grid: false,
+            orientation: 'horizontal',
+            hideValue: true
         });
 
 
