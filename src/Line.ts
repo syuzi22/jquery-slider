@@ -15,7 +15,11 @@ export class Line extends Observable {
         this.sliderLine.classList.add('slider__line_horizontal');
     }
 
-    addLineClickOption() {
+    drawVerticalLine() {
+        this.sliderLine.classList.add('slider__line_vertical');
+    }
+
+    addLineClickOption_H() {
         const that = this;
         this.sliderLine.addEventListener('click', function(event) {
             let position = event.clientX - that.sliderLine.getBoundingClientRect().left;

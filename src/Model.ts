@@ -24,20 +24,34 @@ export class Model extends Observable {
     }
 
     ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
+    /**
+     * Calculates numeric value matching the current thumb offset.
+     * @param position Offset of the slider thumb relative to the slider start position, in pixels.
+     */
     calcValue(position?: number) {
         if (position === undefined) {
-            this.value = Math.ceil(this.options.to / this.options.step) * this.options.step;
+            this.value = this.options.step * Math.ceil(this.options.to / this.options.step);
         } else {
             this.value = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
         }
+
+        if (this.value > this.options.max) {
+            this.value = this.options.max;
+        } else if (this.value < this.options.min) {
+            this.value = this.options.min;
+        }
+
         const calcedValue = new CalcedValue(this.value);
         this.notifyObservers(calcedValue)
         this.calcAdjustedValue();
     }
 
+    /**
+     * According to this.value, calculates an offset relative to the slider start position, in pixels
+     */
     calcAdjustedValue() {
-        let oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
-        let diff = this.value - this.options.min;
+        const oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
+        const diff = this.value - this.options.min;
         this.adjustedValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
         const adjustedValueCalced = new CalcedAdjustedValue(this.adjustedValue);
         this.notifyObservers(adjustedValueCalced);
@@ -46,21 +60,29 @@ export class Model extends Observable {
     ////////////////////////////DOUBLE////////////////////////////////////////////////////////////////////////////////////////
     calcFromValue(position?: number) {
         if (position === undefined) {
-            this.fromValue = Math.ceil(this.options.from / this.options.step) * this.options.step;
+            // this.fromValue = Math.ceil(this.options.from / this.options.step) * this.options.step;
+            this.fromValue = this.options.from;
         } else {
             this.fromValue = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
         }
+        this.fromValue = Math.max(this.options.min, this.fromValue);
         const calcedFromValue = new CalcedFromValue(this.fromValue);
+        console.log('calc from value ', this.fromValue)
         this.notifyObservers(calcedFromValue)
         this.calcAdjustedFromValue();
     }
 
     calcToValue(position?: number) {
         if (position === undefined) {
-            this.toValue  = Math.ceil(this.options.to / this.options.step) * this.options.step;
+            // this.toValue = Math.ceil(this.options.to / this.options.step) * this.options.step;
+            this.toValue = this.options.to;
         } else {
-            this.toValue  = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
+            this.toValue = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
         }
+        // this.toValue must be a power of this.options.step
+        this.toValue =
+        this.toValue = Math.min(this.toValue, this.options.max);
+        console.log("calc to value", this.toValue);
         const calcedToValue = new CalcedToValue(this.toValue);
         this.notifyObservers(calcedToValue)
         this.calcAdjustedToValue();
@@ -98,7 +120,7 @@ export class Model extends Observable {
         this.value = Math.round(value / this.options.step) * this.options.step;
         if (this.value > this.options.max) {
             this.value = this.options.min;
-        }else if (this.value < this.options.min) {
+        } else if (this.value < this.options.min) {
             this.value = this.options.min;
         }
         const calcedValue = new CalcedValue(this.value);
@@ -116,8 +138,7 @@ export class Model extends Observable {
         this.fromValue = Math.round(value / this.options.step) * this.options.step;
         if (this.fromValue > this.toValue) {
             this.fromValue =  this.toValue;
-        } else
-        if (this.fromValue < this.options.min) {
+        } else if (this.fromValue < this.options.min) {
             this.fromValue = this.options.min;
         }
         const calcedFromValue = new CalcedFromValue(this.fromValue);

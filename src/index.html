@@ -9,9 +9,23 @@
 
 <body>
     <div class="slider"></div>
+    <!-- example -->
+    <div style="margin-top: 20px; margin-bottom: 10px;">
+        <label class="slider-inputlabel"> Change Minimum
+            <input type="text" class="slider-min" onclick="this.select();"></input>
+        </label>
+        <label class="slider-inputlabel"> Change Maximum
+            <input type="text" class="slider-max" onclick="this.select();"></input>
+        </label>
+    </div>
     <div style="margin-bottom: 10px;">
         <label class="slider-inputlabel"> Single slider input
             <input type="text" class="slider-input" onclick="this.select();"></input>
+        </label>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <label class="slider-inputlabel"> Step input
+            <input type="text" class="slider-step" onclick="this.select();"></input>
         </label>
     </div>
     <div>
@@ -26,8 +40,21 @@
         <button id="button__items">Items</button>
     </div>
     <div class="slider__buttons" style="margin-bottom: 10px;">
-        <button id="button__hidevalue">Hide Value</button>
-        <button id="button__showvalue">Show Value</button>
+        <div>
+            <label> Hide Value
+                <input type="checkbox" name="slider-hide-value" id="hidevalue">
+            </label>
+        </div>
+        <div>
+            <label> Hide Grid
+                <input type="checkbox" name="slider-hide-grid" id="hidegrid">
+            </label>
+        </div>
+        <div>
+            <label> Hide Min and Max
+                <input type="checkbox" name="slider-hide-minmax" id="hideminmax">
+            </label>
+        </div>
     </div>
 </body>
 

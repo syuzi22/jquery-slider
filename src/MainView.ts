@@ -22,24 +22,18 @@ export class MainView implements VeiwInterface {
                             <div class="slider__to"></div>
                         </div>
                 </div>
+                <div class="slider__grid"></div>
                 <div class="slider__minmax">
                     <div class="slider__min"></div>
                     <div class="slider__max"></div>
                 </div>
-            </div>`;
-    }
 
-    ////////////////
-    renderGrid() {
-        let tmp = `<div class="slider__grid"></div>`;
-        this.getLineNode().insertAdjacentHTML('afterend', tmp);
+            </div>`;
     }
 
     getGridNode(): HTMLElement {
         return this.node.querySelector('.slider__grid');
     }
-
-    ////////////////////
 
     getLineNode() : HTMLElement {
         return this.node.querySelector('.slider__line');
@@ -61,6 +55,10 @@ export class MainView implements VeiwInterface {
         return this.node.querySelector('.slider__to');
     }
 
+    getMinMaxNode(): HTMLElement {
+        return this.node.querySelector('.slider__minmax')
+    }
+
     getMinNode() : HTMLElement {
         return this.node.querySelector('.slider__min');
     }
@@ -72,20 +70,20 @@ export class MainView implements VeiwInterface {
         return this.node.querySelector('.slider__progressbar');
     }
 
+    ////////
 
-
-    setValue(node: HTMLElement, value) {
-        node.textContent = value;
+    setValue(node: HTMLElement, value: number) {
+        node.textContent = value.toString();
     }
 
-    setMin(value) : void {
+    setMin(value: number) : void {
         let node = this.getMinNode();
-        node.textContent = value;
+        node.textContent = value.toString();
     }
 
-    setMax(value) : void {
+    setMax(value: number) : void {
         let node = this.getMaxNode();
-        node.textContent = value;
+        node.textContent = value.toString();
     }
 
     ///////
@@ -97,7 +95,21 @@ export class MainView implements VeiwInterface {
             this.getFromNode().style.display = 'block';
             this.getToNode().style.display = 'block';
         }
-
     }
     /////////
+    hideGrid(value: boolean) {
+        if (value === true) {
+            this.getGridNode().style.display = 'none';
+        } else {
+            this.getGridNode().style.display = 'flex';
+        }
+    }
+    /////////
+    hideMinMax(value: boolean) {
+        if (value === true) {
+            this.getMinMaxNode().style.display = 'none';
+        } else {
+            this.getMinMaxNode().style.display = 'flex';
+        }
+    }
 }

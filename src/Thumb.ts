@@ -53,7 +53,7 @@ export class Thumb extends Observable {
         thumb.ondragstart = () => false;
     }
 
-    moveThumbOn(position: number) {
+    moveThumbOn_H(position: number) {
         this.thumb.style.left = position + 'px';
     }
 }

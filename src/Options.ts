@@ -12,9 +12,10 @@ export interface OptionsInterface {
     to?: number;
     step?: number;
     items?: string[];
-    grid?: boolean;
     orientation?: string;
+    hideGrid?: boolean;
     hideValue?: boolean;
+    hideMinMax?: boolean;
 }
 
 export class Options implements OptionsInterface {
@@ -25,9 +26,10 @@ export class Options implements OptionsInterface {
     readonly to: number; //start position for right handle
     readonly step: number; //sliders step
     readonly items: string[]; //grid items
-    readonly grid: boolean; //enable grid of values above the slider
+    readonly hideGrid: boolean; //enable grid of values above the slider
     readonly orientation: string; //horizontal or vertical
     hideValue: boolean; //hides from and to label
+    hideMinMax: boolean;
 
     constructor(settings: OptionsInterface) {
         this.type = settings.type || Type.Single;
@@ -37,9 +39,10 @@ export class Options implements OptionsInterface {
         this.to = settings.to || 50;
         this.step = settings.step || 1;
         this.items = settings.items || [];
-        this.grid = settings.grid || false;
         this.orientation = settings.orientation || 'horizontal';
+        this.hideGrid = settings.hideGrid || false;
         this.hideValue = settings.hideValue || false;
+        this.hideMinMax = settings.hideMinMax || false;
     }
 }
 

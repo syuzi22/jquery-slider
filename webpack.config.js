@@ -4,6 +4,7 @@ const webpack = require("webpack");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+  mode: 'development',
   entry: ['@babel/polyfill', './src/index.ts'],
   output: {
     filename: 'main.js',
@@ -16,6 +17,7 @@ module.exports = {
     port: 4200,
     index: "./index.html",
   },
+  devtool: "inline-source-map",
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -49,6 +51,15 @@ module.exports = {
               '@babel/plugin-proposal-class-properties'
             ]
           }
+        }
+      },
+      {
+        test: /\.ts$/,
+        exclude: [ path.resolve(__dirname, "test") ],
+        enforce: 'post',
+        use: {
+          loader: 'istanbul-instrumenter-loader',
+          options: { esModules: true }
         }
       }
     ]

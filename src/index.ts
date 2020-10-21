@@ -13,7 +13,7 @@ $.fn.slider = function (settings: object) : JQuery {
         controllers.set(node, controller);
     })
 
-    // Public API
+    // Public APIx
 
      ////////////////////////////////////////////
     this.changeView = function (view: string) {
@@ -57,6 +57,39 @@ $.fn.slider = function (settings: object) : JQuery {
         });
     };
 
+    //////////////
+
+    this.changeStep = function (value: number) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).changeStep(value);
+        });
+    };
+
+    this.changeMin = function (value: number) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).changeMin(value);
+        });
+    };
+
+    this.changeMax = function (value: number) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).changeMax(value);
+        });
+    };
+
+
     ///////////////////////////////
 
     this.hideValue = function (value: boolean) {
@@ -69,9 +102,38 @@ $.fn.slider = function (settings: object) : JQuery {
         });
     };
 
+    this.hideGrid = function (value: boolean) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).hideGrid(value);
+        });
+    };
+
+    this.hideMinMax = function (value: boolean) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).hideMinMax(value);
+        });
+    };
+    ////////////////////////////////////
+
+
     this.data('slider', this); // Save this instance for easy access from outside
     return this // jQuery object for chaining
 }
+
+
+
+
+
+
+
 
 /////////////////////////////////////////////////////////////////
 //создаю слайдер, как внешний пользователь\/
@@ -80,6 +142,9 @@ $(document).ready(() => {
     const input = document.querySelector('.slider-input') as HTMLInputElement;
     const inputFrom = document.querySelector('.slider-input-from') as HTMLInputElement;
     const inputTo = document.querySelector('.slider-input-to') as HTMLInputElement;
+    const inputStep = document.querySelector('.slider-step') as HTMLInputElement;
+    const inputMin = document.querySelector('.slider-min') as HTMLInputElement;
+    const inputMax = document.querySelector('.slider-max') as HTMLInputElement;
 
 
     const mySlider = $('.slider')
@@ -92,17 +157,27 @@ $(document).ready(() => {
         .on('slider.valueToCalced', function (event, value) {
             inputTo.value = value;
         })
+        .on('slider.step', function (event, value) {
+            inputStep.value = value;
+        })
+        .on('slider.min', function (event, value) {
+            inputMin.value = value;
+        })
+        .on('slider.max', function (event, value) {
+            inputMax.value = value;
+        })
         .slider({
             type: 'double',
             min: 10,
             max: 90,
             from: 20, // если single, то этот параметр не учитывается
             to: 80,
-            step: 1,
+            step: 10,
             items: ['junior', 'middle', 'senior'],
-            grid: false,
-            orientation: 'horizontal',
-            hideValue: true
+            // orientation: 'vertical',
+            hideGrid: false,
+            hideValue: false,
+            hideMinMax: false
         });
 
 
@@ -130,12 +205,47 @@ $(document).ready(() => {
         mySlider.data('slider').updateTo(value);
     };
 
+    inputStep.onkeypress = function(event) {
+        const value = parseInt(inputStep.value)
+        if (isNaN(value)) {
+            return;
+        }
+        if (event.code === 'Enter'){
+            event.preventDefault();
+            mySlider.data('slider').changeStep(value);
+        }
+    }
+
+    inputMin.onkeypress = function(event) {
+        const value = parseInt(inputMin.value)
+        if (isNaN(value)) {
+            return;
+        }
+        if (event.code === 'Enter'){
+            event.preventDefault();
+            mySlider.data('slider').changeMin(value);
+        }
+    }
+
+    inputMax.onkeypress = function(event) {
+        const value = parseInt(inputMax.value)
+        if (isNaN(value)) {
+            return;
+        }
+        if (event.code === 'Enter'){
+            event.preventDefault();
+            mySlider.data('slider').changeMax(value);
+        }
+    }
+
+
      ////////////////////////////////////////////
     let singleBut = document.getElementById('button__single');
     let doubleBut = document.getElementById('button__double');
     let itemsBut = document.getElementById('button__items');
-    let hideValue = document.getElementById('button__hidevalue');
-    let showValue = document.getElementById('button__showvalue');
+    let hideValue = document.getElementById('hidevalue');
+    let hideGrid = document.getElementById('hidegrid');
+    let hideMinMax = document.getElementById('hideminmax');
 
     singleBut.onclick = function() {
         mySlider.data('slider').changeView('single');
@@ -147,16 +257,27 @@ $(document).ready(() => {
         mySlider.data('slider').changeView('items');
     }
 
-    hideValue.onclick = function() {
-        mySlider.data('slider').hideValue(true);
+    hideValue.oninput = function() {
+        if (hideValue.checked) {
+            mySlider.data('slider').hideValue(true);
+        } else {
+            mySlider.data('slider').hideValue(false);
+        }
     }
 
-    showValue.onclick = function() {
-        mySlider.data('slider').hideValue(false);
+    hideGrid.oninput = function() {
+        if (hideGrid.checked) {
+            mySlider.data('slider').hideGrid(true);
+        } else {
+            mySlider.data('slider').hideGrid(false);
+        }
     }
-    /////////////////////////////////////////////
 
-
-
-
+    hideMinMax.oninput = function() {
+        if (hideMinMax.checked) {
+            mySlider.data('slider').hideMinMax(true);
+        } else {
+            mySlider.data('slider').hideMinMax(false);
+        }
+    }
 })

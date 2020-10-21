@@ -43,10 +43,37 @@ export class Controller {
 
     constructor() {}
 
-    init (options: Options, node: HTMLElement): void {
+    init (options: OptionsInterface, node: HTMLElement): void {
         this.options = options;
         this.node = node
-        this.setBaseOptions();
+        this.draw();
+
+    }
+
+    reInit(options: OptionsInterface, node: HTMLElement): void {
+        while (this.node.firstChild) {
+            this.node.removeChild(this.node.firstChild);
+        }
+        this.init(options, node);
+    }
+
+    private draw(): void {
+        this.model = new Model(this.options);
+        this.model.addObserver(this)
+        this.view = new MainView(this.node);
+        this.view.render();
+        this.line = new Line(this.view.getLineNode());
+        this.line.addObserver(this);
+        this.line.addProgressBar(this.view.getProgressBarNode());
+
+
+        if (this.options.orientation === 'vertical') {
+            this.line.drawVerticalLine();
+        } else {
+            this.line.drawHorizontalLine();
+        }
+
+
         if (this.options.type === Type.Double) {
             this.createDouble();
         } else if (this.options.type === Type.Items) {
@@ -54,57 +81,57 @@ export class Controller {
         } else {
             this.createSingle();
         }
-    }
 
-    setBaseOptions() {
-        this.model = new Model(this.options);
-        this.model.addObserver(this)
-        this.view = new MainView(this.node);
-        this.view.render();
-        this.line = new Line(this.view.getLineNode());
-        this.line.addObserver(this)
-        this.line.drawHorizontalLine();
-        this.line.addProgressBar(this.view.getProgressBarNode());
-        this.view.setMin(this.options.min);
-        this.view.setMax(this.options.max);
-        if (this.options.grid) {
-            this.addGrid();
+        $(this.node).trigger('slider.step', [this.options.step])
+        $(this.node).trigger('slider.min', [this.options.min])
+        $(this.node).trigger('slider.max', [this.options.max])
+
+        if (this.options.hideValue === true) {
+            this.view.hideValue(true);
         }
-
-    }
-
-    addGrid() {
-        this.view.renderGrid();
-        this.grid = new Grid(this.view.getGridNode());
-        this.grid.drawLabels((this.options.max - this.options.min) / this.options.step);
     }
 
     createSingle() {
         this.thumb = new Thumb(this.view.getThumbToNode());
-        this.thumb.addObserver(this)
-        this.thumb.drawHorizontal();
-        this.thumb.addHorizontalMovement(this.view.getLineNode());
-        this.model.calcValue();
-        this.line.addLineClickOption();
-        if (this.options.hideValue === true) {
-            this.view.hideValue(true);
+        this.thumb.addObserver(this);
+        this.grid = new Grid(this.view.getGridNode());
+
+        if (this.options.orientation === 'vertical') {
+            console.log('VerticalSingle');
+        } else {
+            this.thumb.drawHorizontal();
+            this.thumb.addHorizontalMovement(this.view.getLineNode());
+            this.line.addLineClickOption_H();
+            this.grid.drawLabels((this.options.max - this.options.min) / this.options.step);
+            this.view.setMin(this.options.min);
+            this.view.setMax(this.options.max);
         }
+
+        this.model.calcValue();
     }
 
     createDouble() {
         this.doubleThumb = new DoubleThumb(this.view.getThumbFromNode(), this.view.getThumbToNode());
         this.doubleThumb.addObserver(this);
-        this.doubleThumb.drawHorizontal();
-        this.doubleThumb.addHorizontalMovement(this.view.getLineNode());
+        this.grid = new Grid(this.view.getGridNode());
+
+        if (this.options.orientation === 'vertical') {
+            console.log('VerticalDouble');
+        } else {
+            this.doubleThumb.drawHorizontal();
+            this.doubleThumb.addHorizontalMovement(this.view.getLineNode());
+            this.line.addLineClickOption_H();
+            this.grid.drawLabels((this.options.max - this.options.min) / this.options.step);
+            this.view.setMin(this.options.min);
+            this.view.setMax(this.options.max);
+        }
         this.model.calcFromValue();
         this.model.calcToValue();
-        this.line.addLineClickOption();
-        if (this.options.hideValue === true) {
-            this.view.hideValue(true);
-        }
+
     }
 
     createItems() {
+        //тут пока не продумывала вертикаль///
         this.itemsView = new Items(this.view.getLineNode());
         this.itemsView.addObserver(this);
         this.view.getMaxNode().style.display = 'none';
@@ -157,7 +184,7 @@ export class Controller {
             $(this.node).trigger('slider.valueCalced', [obj.value])
         // рассчитана позиция бегунка с учетом шага, передаем ее во View
         } else if (obj instanceof CalcedAdjustedValue) {
-            this.thumb.moveThumbOn(obj.value);
+            this.thumb.moveThumbOn_H(obj.value);
             this.line.updateProgressBarWidth(obj.value)
         }
         ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
@@ -173,10 +200,10 @@ export class Controller {
             this.view.setValue(this.view.getToNode(), obj.value);
             $(this.node).trigger('slider.valueToCalced', [obj.value])
         } else if (obj instanceof CalcedAdjustedFromValue) {
-            this.doubleThumb.moveThumbFromOn(obj.value);
+            this.doubleThumb.moveThumbFromOn_H(obj.value);
             this.line.setProgressBarLeftPos(obj.value);
         } else if (obj instanceof CalcedAdjustedToValue) {
-            this.doubleThumb.moveThumbToOn(obj.value);
+            this.doubleThumb.moveThumbToOn_H(obj.value);
             this.line.setProgressBarRightPos(obj.value)
         }
         ////////////////////////////ITEMS///////////////////////////////////////////////////////////////
@@ -192,17 +219,14 @@ export class Controller {
 
     //метод смены вида слайдера
     changeView(view: string) {
-        this.setBaseOptions.call(this);
         if (view === 'single') {
             this.options = new SingleOptions(this.options);
-            this.createSingle.call(this);
         } else if (view === 'double') {
             this.options = new DoubleOptions(this.options);
-            this.createDouble.call(this);
         } else if (view === 'items') {
             this.options = new ItemsOptions(this.options);
-            this.createItems.call(this)
         }
+        this.draw.call(this);
     }
 
     //метод, чтобы извне передать значение и инициировать смену значения и положения бегунка
@@ -218,6 +242,28 @@ export class Controller {
         this.model.updateValueTo(value)
     }
 
+
+
+    changeStep(value: number) {
+        if (value <= 0) {
+            throw RangeError('Value must be positive');
+        }
+        this.options.step = value;
+        this.reInit(this.options, this.node);
+    }
+
+    changeMin(value: number) {
+        this.options.min = value;
+        this.reInit(this.options, this.node);
+    }
+
+    changeMax(value: number) {
+        this.options.max = value;
+        this.reInit(this.options, this.node);
+    }
+
+        ///////////////////////
+
     //метод для скрытия значения над бегунком (единственным или "от" и "до")
     hideValue(hide: boolean) {
         if (hide === true) {
@@ -228,4 +274,25 @@ export class Controller {
             this.view.hideValue(false);
         }
     }
+
+    hideGrid(hide: boolean) {
+        if (hide === true) {
+            this.options.hideGrid = true;
+            this.view.hideGrid(true);
+        } else {
+            this.options.hideGrid = false;
+            this.view.hideGrid(false);
+        }
+    }
+
+    hideMinMax(hide: boolean) {
+        if (hide === true) {
+            this.options.hideGrid = true;
+            this.view.hideMinMax(true);
+        } else {
+            this.options.hideGrid = false;
+            this.view.hideMinMax(false);
+        }
+    }
+    ////
 }

@@ -86,10 +86,10 @@ export class DoubleThumb extends Observable {
         thumbTo.ondragstart = () => false;
     }
 
-    moveThumbFromOn(position: number) {
+    moveThumbFromOn_H(position: number) {
         this.thumbFrom.style.left = position + 'px';
     }
-    moveThumbToOn(position: number) {
+    moveThumbToOn_H(position: number) {
         this.thumbTo.style.left = position + 'px';
     }
 }

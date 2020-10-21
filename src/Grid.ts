@@ -8,6 +8,9 @@ export class Grid extends Observable {
     }
 
     drawLabels(amount: number) {
+        if (amount <= 0) {
+            return;
+        }
         for (let i = 0; i <= amount; i++) {
             let label = document.createElement('span');
             label.classList.add('slider__gridlabel');

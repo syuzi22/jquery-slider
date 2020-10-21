@@ -8,7 +8,7 @@ export class Items extends Observable {
         this.line = node;
     }
 
-    addItemsToLine(items: array, step: number) {
+    addItemsToLine(items: Array<string>, step: number) {
         const self = this;
         let count = 0;
         for (let i = 0; i < items.length; i++) {
@@ -21,8 +21,8 @@ export class Items extends Observable {
             count += step;
         }
     }
-    itemClickHandler(event) {
-        let target = event.target;
+    itemClickHandler(event: MouseEvent) {
+        let target = event.target as HTMLElement;
         let elems = target.parentElement.children;
         for (let i = 0; i < elems.length; i++) {
             if (elems[i].classList.contains('slider__item')) {
