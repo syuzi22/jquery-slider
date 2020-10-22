@@ -12,6 +12,11 @@ body {
 }
 /* //////////////////////// */
 
+.slider__wrap_ver {
+  display: flex;
+  flex-direction: row;
+}
+
 .slider__line {
   position: relative;
   background-color: burlywood;
@@ -25,21 +30,10 @@ body {
 }
 
 .slider__line_vertical{
-  height: 600px;
+  height: 300px;
   width: 10px;
 }
 /* ///////////////// */
-
-
-
-.slider-input {
-  margin-left: 50px;
-  margin-top: 20px;
-}
-
-.slider-inputlabel {
-  margin-left: 50px;
-}
 
 
 .slider__thumb-from {
@@ -54,7 +48,7 @@ body {
   border-radius: 3px;
   background: blue;
   cursor: pointer;
-  right: 0;
+
 }
 
 .slider__thumbfrom_horizontal {
@@ -67,16 +61,40 @@ body {
   width: 10px;
   height: 20px;
   top: -5px;
+  right: 0;
 }
+
+.slider__thumbfrom_vertical {
+  width: 20px;
+  height: 10px;
+  left: -5px;
+}
+
+.slider__thumbto_vertical {
+  width: 20px;
+  height: 10px;
+  left: -5px;
+}
+
 
 .slider__from {
   margin-top:-20px;
   user-select: none;
 }
 
+.slider__from_ver {
+  margin-top: -3px;
+  margin-left: -25px;
+}
+
 .slider__to {
   margin-top:-20px;
   user-select: none;
+}
+
+.slider__to_ver {
+  margin-top: -3px;
+  margin-left: -32px;
 }
 
 .slider__minmax {
@@ -86,12 +104,23 @@ body {
   padding-top: 5px;
 }
 
+.slider__minmax_ver {
+  padding-top: 0;
+  padding-left: 5px;
+  flex-direction: column-reverse;
+}
+
+
+
 .slider__progressbar {
   position: relative;
   height: 10px;
   background-color: green;
-  display: none;
+  /* display: none; */
 }
+
+
+
 
 .slider__item {
   cursor: pointer;
@@ -119,14 +148,7 @@ body {
   font-size: 25px;
 }
 
-button {
-  cursor: pointer;
-}
 
-.slider__buttons {
-  margin-top: 20px;
-  margin-left: 50px;
-}
 
 .slider__grid {
   padding-left: 1%;
@@ -135,9 +157,44 @@ button {
   justify-content: space-between;
 }
 
-.slider__gridlabel {
+.slider__grid_ver {
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-left: 0;
+  flex-direction: column;
+}
+
+.slider__gridlabel_hor {
   width: 1px;
   height: 12px;
   background-color: black;
 }
 
+.slider__gridlabel_ver {
+  width: 12px;
+  height: 1px;
+  background-color: black;
+}
+
+
+
+
+
+
+
+button {
+  cursor: pointer;
+}
+
+.slider__buttons {
+  margin-top: 20px;
+  margin-left: 50px;
+}
+.slider-input {
+  margin-left: 50px;
+  margin-top: 20px;
+}
+
+.slider-inputlabel {
+  margin-left: 50px;
+}

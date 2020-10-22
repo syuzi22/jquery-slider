@@ -167,20 +167,21 @@ $(document).ready(() => {
             inputMax.value = value;
         })
         .slider({
-            type: 'double',
+            type: 'single',
             min: 10,
             max: 90,
             from: 20, // если single, то этот параметр не учитывается
             to: 80,
             step: 10,
             items: ['junior', 'middle', 'senior'],
-            // orientation: 'vertical',
+            orientation: 'vertical',
             hideGrid: false,
             hideValue: false,
             hideMinMax: false
         });
 
 
+    /////////////////////
     input.oninput = function() {
         const value = parseInt(input.value)
         if (isNaN(value)) {
@@ -188,6 +189,7 @@ $(document).ready(() => {
         }
         mySlider.data('slider').update(value);
     };
+    //////////////////////////
 
     inputFrom.oninput = function() {
         const value = parseInt(inputFrom.value)

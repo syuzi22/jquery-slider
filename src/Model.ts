@@ -1,9 +1,10 @@
 import {Observable} from './Observable'
-import { CalcedValue, CalcedFromValue, CalcedToValue, CalcedAdjustedValue, CalcedAdjustedFromValue, CalcedAdjustedToValue, CalcedItemsStep } from './Event'
+import { CalcedValueHor, CalcedValueVer, CalcedFromValue, CalcedToValue, CalcedAdjustedValueHor, CalcedAdjustedValueVer, CalcedAdjustedFromValue, CalcedAdjustedToValue, CalcedItemsStep } from './Event'
 import { Options, OptionsInterface } from './Options';
 
 export class Model extends Observable {
     private sliderWidth: number;
+    private sliderHeight: number;
     private value: number = 0;
     private fromValue: number = 0;
     private toValue: number = 0;
@@ -23,12 +24,16 @@ export class Model extends Observable {
         this.sliderWidth = val;
     }
 
+    updateSliderHeight(val: number) {
+        this.sliderHeight = val;
+    }
+
     ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
     /**
      * Calculates numeric value matching the current thumb offset.
      * @param position Offset of the slider thumb relative to the slider start position, in pixels.
      */
-    calcValue(position?: number) {
+    calcValue_H(position?: number) {
         if (position === undefined) {
             this.value = this.options.step * Math.ceil(this.options.to / this.options.step);
         } else {
@@ -41,21 +46,49 @@ export class Model extends Observable {
             this.value = this.options.min;
         }
 
-        const calcedValue = new CalcedValue(this.value);
-        this.notifyObservers(calcedValue)
-        this.calcAdjustedValue();
+        const calcedValueHor = new CalcedValueHor(this.value);
+        this.notifyObservers(calcedValueHor)
+        this.calcAdjustedValue_H();
+    }
+
+
+    calcValue_V(position?: number) {
+        if (position === undefined) {
+            this.value = this.options.step * Math.ceil(this.options.to / this.options.step);
+        } else {
+            this.value = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderHeight) / this.options.step) * this.options.step;
+        }
+
+        if (this.value > this.options.max) {
+            this.value = this.options.max;
+        } else if (this.value < this.options.min) {
+            this.value = this.options.min;
+        }
+
+        const calcedValueVer = new CalcedValueVer(this.value);
+        this.notifyObservers(calcedValueVer)
+        this.calcAdjustedValue_V();
     }
 
     /**
      * According to this.value, calculates an offset relative to the slider start position, in pixels
      */
-    calcAdjustedValue() {
+    calcAdjustedValue_H() {
         const oneInPxl = this.sliderWidth / (this.options.max - this.options.min);
         const diff = this.value - this.options.min;
         this.adjustedValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
-        const adjustedValueCalced = new CalcedAdjustedValue(this.adjustedValue);
-        this.notifyObservers(adjustedValueCalced);
+        const adjustedValueCalcedHor = new CalcedAdjustedValueHor(this.adjustedValue);
+        this.notifyObservers(adjustedValueCalcedHor);
     }
+
+    calcAdjustedValue_V() {
+        const oneInPxl = this.sliderHeight / (this.options.max - this.options.min);
+        const diff = this.value - this.options.min;
+        this.adjustedValue = Math.round((diff * oneInPxl * this.options.step) / this.options.step);
+        const adjustedValueCalcedVer = new CalcedAdjustedValueVer(this.adjustedValue);
+        this.notifyObservers(adjustedValueCalcedVer);
+    }
+
 
     ////////////////////////////DOUBLE////////////////////////////////////////////////////////////////////////////////////////
     calcFromValue(position?: number) {
@@ -123,11 +156,19 @@ export class Model extends Observable {
         } else if (this.value < this.options.min) {
             this.value = this.options.min;
         }
-        const calcedValue = new CalcedValue(this.value);
-        this.timerId = window.setTimeout(function() {
-            that.notifyObservers(calcedValue);
-            that.calcAdjustedValue();
-        }, 1000);
+        if (this.options.orientation === 'vertical') {
+            const calcedValueVer = new CalcedValueVer(this.value);
+            this.timerId = window.setTimeout(function() {
+                that.notifyObservers(calcedValueVer)
+                that.calcAdjustedValue_V();
+            }, 1000);
+        } else {
+            const calcedValueHor = new CalcedValueHor(this.value);
+            this.timerId = window.setTimeout(function() {
+                that.notifyObservers(calcedValueHor)
+                that.calcAdjustedValue_H();
+            }, 1000);
+        }
     }
 
     updateValueFrom(value: number) {

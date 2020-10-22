@@ -1,5 +1,5 @@
 import {Observable} from './Observable'
-import { ThumbChangedPosition, CalcedSliderWidth } from './Event'
+import { ThumbHorChangedPosition, ThumbVerChangedPosition, CalcedSliderWidth, CalcedSliderHeight } from './Event'
 
 const PointerDownState = 'down';
 const PointerUpState = 'up';
@@ -14,6 +14,10 @@ export class Thumb extends Observable {
 
     drawHorizontal() {
         this.thumb.classList.add('slider__thumbto_horizontal');
+    }
+
+    drawVertical() {
+        this.thumb.classList.add('slider__thumbto_vertical');
     }
 
     addHorizontalMovement(node: HTMLElement) {
@@ -42,8 +46,8 @@ export class Thumb extends Observable {
             let rightEdge = line.offsetWidth - thumb.offsetWidth;
             if (newLeft > rightEdge) {newLeft = rightEdge;}
 
-            const thumbFromChangedPos = new ThumbChangedPosition(newLeft);
-            self.notifyObservers(thumbFromChangedPos);
+            const thumbChangedPos = new ThumbHorChangedPosition(newLeft);
+            self.notifyObservers(thumbChangedPos);
         };
 
         thumb.onpointerup = function(event) {
@@ -55,5 +59,52 @@ export class Thumb extends Observable {
 
     moveThumbOn_H(position: number) {
         this.thumb.style.left = position + 'px';
+    }
+
+    addVerticalMovement(node: HTMLElement) {
+        const line = node;
+        const self = this;
+        const thumb = this.thumb;
+
+        const calcedSliderHeight = new CalcedSliderHeight(line.offsetHeight - thumb.offsetHeight);
+        self.notifyObservers(calcedSliderHeight);
+        let shiftY: number;
+
+        thumb.onpointerdown = function (event) {
+            event.preventDefault();
+
+            // shiftY = event.clientY - thumb.getBoundingClientRect().top;
+            shiftY = thumb.getBoundingClientRect().bottom - event.clientY;
+
+            thumb.setPointerCapture(event.pointerId);
+            thumb.dataset.pointerState = PointerDownState;
+        };
+
+        thumb.onpointermove = function (event) {
+            if (thumb.dataset.pointerState !== PointerDownState) {
+                return;
+            }
+
+            // let newtop = event.clientY - shiftY - line.getBoundingClientRect().top;
+            let newtop = line.getBoundingClientRect().bottom - event.clientY - shiftY;
+
+            if (newtop < 0) {newtop = 0;}
+            let topEdge = line.offsetHeight - thumb.offsetHeight;
+            if (newtop > topEdge) {newtop = topEdge;}
+
+            const thumbChangedPos = new ThumbVerChangedPosition(newtop);
+            self.notifyObservers(thumbChangedPos);
+        };
+
+        thumb.onpointerup = function(event) {
+            thumb.dataset.pointerState = PointerUpState;
+        }
+
+        thumb.ondragstart = () => false;
+    }
+
+    moveThumbOn_V(position: number) {
+        // this.thumb.style.top = position + 'px';
+        this.thumb.style.bottom = position + 'px';
     }
 }

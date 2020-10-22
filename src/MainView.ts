@@ -31,6 +31,10 @@ export class MainView implements VeiwInterface {
             </div>`;
     }
 
+    getWrapNode(): HTMLElement {
+        return this.node.querySelector('.slider__wrap');
+    }
+
     getGridNode(): HTMLElement {
         return this.node.querySelector('.slider__grid');
     }
@@ -85,6 +89,7 @@ export class MainView implements VeiwInterface {
         let node = this.getMaxNode();
         node.textContent = value.toString();
     }
+
 
     ///////
     hideValue(value: boolean) {

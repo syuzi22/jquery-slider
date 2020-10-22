@@ -1,5 +1,5 @@
 import {Observable} from './Observable'
-import {LineClicked} from './Event'
+import { LineClicked_H, LineClicked_V } from './Event'
 
 export class Line extends Observable {
     sliderLine: HTMLElement
@@ -23,7 +23,16 @@ export class Line extends Observable {
         const that = this;
         this.sliderLine.addEventListener('click', function(event) {
             let position = event.clientX - that.sliderLine.getBoundingClientRect().left;
-            const lineClicked = new LineClicked(position);
+            const lineClicked = new LineClicked_H(position);
+            that.notifyObservers(lineClicked);
+        })
+    }
+
+    addLineClickOption_V() {
+        const that = this;
+        this.sliderLine.addEventListener('click', function(event) {
+            let position = that.sliderLine.getBoundingClientRect().bottom - event.clientY;
+            const lineClicked = new LineClicked_V(position);
             that.notifyObservers(lineClicked);
         })
     }
@@ -42,6 +51,16 @@ export class Line extends Observable {
         this.updateProgressBarWidth();
     }
 
+    setProgressBarTopPos(position: number) {
+        this.progressBarNodeTopPos = position;
+        this.updateProgressBarWidth();
+    }
+
+    setProgressBarBottomPos(position: number) {
+        this.progressBarNodeBottomPos = position;
+        this.updateProgressBarWidth();
+    }
+
     updateProgressBarWidth(position?: number) {
         if (position >= 0) {
             this.progressBarNode.style.width =  position + 'px';
@@ -51,7 +70,24 @@ export class Line extends Observable {
         }
     }
 
+    updateProgressBarHeight(position?: number) {
+        if (position >= 0) {
+            this.progressBarNode.style.height =  position + 'px';
+            this.progressBarNode.style.marginTop =  this.getLineHeight() - position + 'px';
+            this.progressBarNode.style.borderBottomLeftRadius = '5px';
+            this.progressBarNode.style.borderBottomRightRadius = '5px';
+
+        }else {
+            this.progressBarNode.style.bottom = this.progressBarNodeTopPos + 'px';
+            this.progressBarNode.style.height = this.progressBarNodeBottomPos - this.progressBarNodeTopPos + 'px';
+        }
+    }
+
     getLineWidth() {
         return this.sliderLine.offsetWidth;
+    }
+
+    getLineHeight() {
+        return this.sliderLine.offsetHeight;
     }
 }

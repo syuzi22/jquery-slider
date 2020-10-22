@@ -13,9 +13,26 @@ export class CalcedSliderWidth extends SliderEvent {
     }
 }
 
+//рассчитана высота слайдера
+export class CalcedSliderHeight extends SliderEvent {
+    value: number;
+    constructor(value: number) {
+        super();
+        this.value = value;
+    }
+}
+
 //бегунок изменил положение вследствие перетаскивания его мышью
 
-export class ThumbChangedPosition extends SliderEvent{
+export class ThumbHorChangedPosition extends SliderEvent{
+    position: number
+    constructor(pos: number) {
+        super();
+        this.position = pos;
+    }
+}
+
+export class ThumbVerChangedPosition extends SliderEvent{
     position: number
     constructor(pos: number) {
         super();
@@ -42,7 +59,15 @@ export class ThumbToChangedPosition extends SliderEvent{
 
 
 //рассчитано текущее значение слайдера для отображения пользователям над бегунком
-export class CalcedValue extends SliderEvent{
+export class CalcedValueHor extends SliderEvent{
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+
+export class CalcedValueVer extends SliderEvent{
     value: number
     constructor(val: number) {
         super();
@@ -69,7 +94,15 @@ export class CalcedToValue extends SliderEvent{
 
 //на основе текущего значения рассчитано положение, которое должен занять бегунок
 
-export class CalcedAdjustedValue extends SliderEvent {
+export class CalcedAdjustedValueHor extends SliderEvent {
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+
+export class CalcedAdjustedValueVer extends SliderEvent {
     value: number
     constructor(val: number) {
         super();
@@ -94,7 +127,15 @@ export class CalcedAdjustedToValue extends SliderEvent {
 
 
 //произошел клик по слайдеру
-export class LineClicked extends SliderEvent {
+export class LineClicked_H extends SliderEvent {
+    position: number
+    constructor(val: number) {
+        super();
+        this.position = val;
+    }
+}
+
+export class LineClicked_V extends SliderEvent {
     position: number
     constructor(val: number) {
         super();
