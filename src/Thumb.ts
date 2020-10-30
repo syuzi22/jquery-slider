@@ -72,8 +72,6 @@ export class Thumb extends Observable {
 
         thumb.onpointerdown = function (event) {
             event.preventDefault();
-
-            // shiftY = event.clientY - thumb.getBoundingClientRect().top;
             shiftY = thumb.getBoundingClientRect().bottom - event.clientY;
 
             thumb.setPointerCapture(event.pointerId);
@@ -84,8 +82,6 @@ export class Thumb extends Observable {
             if (thumb.dataset.pointerState !== PointerDownState) {
                 return;
             }
-
-            // let newtop = event.clientY - shiftY - line.getBoundingClientRect().top;
             let newtop = line.getBoundingClientRect().bottom - event.clientY - shiftY;
 
             if (newtop < 0) {newtop = 0;}
@@ -104,7 +100,6 @@ export class Thumb extends Observable {
     }
 
     moveThumbOn_V(position: number) {
-        // this.thumb.style.top = position + 'px';
         this.thumb.style.bottom = position + 'px';
     }
 }

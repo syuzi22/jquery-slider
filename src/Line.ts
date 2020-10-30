@@ -6,6 +6,9 @@ export class Line extends Observable {
     progressBarNode: HTMLElement
     progressBarNodeLeftPos: number
     progressBarNodeRightPos: number
+    progressBarNodeTopPos: number
+    progressBarNodeBottomPos: number
+
 
     constructor(node: HTMLElement) {
         super();
@@ -51,16 +54,6 @@ export class Line extends Observable {
         this.updateProgressBarWidth();
     }
 
-    setProgressBarTopPos(position: number) {
-        this.progressBarNodeTopPos = position;
-        this.updateProgressBarWidth();
-    }
-
-    setProgressBarBottomPos(position: number) {
-        this.progressBarNodeBottomPos = position;
-        this.updateProgressBarWidth();
-    }
-
     updateProgressBarWidth(position?: number) {
         if (position >= 0) {
             this.progressBarNode.style.width =  position + 'px';
@@ -68,6 +61,16 @@ export class Line extends Observable {
             this.progressBarNode.style.left = this.progressBarNodeLeftPos + 'px';
             this.progressBarNode.style.width = this.progressBarNodeRightPos - this.progressBarNodeLeftPos + 'px';
         }
+    }
+
+    setProgressBarTopPos(position: number) {
+        this.progressBarNodeTopPos = position;
+        this.updateProgressBarHeight();
+    }
+
+    setProgressBarBottomPos(position: number) {
+        this.progressBarNodeBottomPos = position;
+        this.updateProgressBarHeight();
     }
 
     updateProgressBarHeight(position?: number) {
@@ -78,8 +81,8 @@ export class Line extends Observable {
             this.progressBarNode.style.borderBottomRightRadius = '5px';
 
         }else {
-            this.progressBarNode.style.bottom = this.progressBarNodeTopPos + 'px';
-            this.progressBarNode.style.height = this.progressBarNodeBottomPos - this.progressBarNodeTopPos + 'px';
+            this.progressBarNode.style.height =  this.progressBarNodeTopPos - this.progressBarNodeBottomPos + 'px';
+            this.progressBarNode.style.marginTop =  this.getLineHeight() - this.progressBarNodeTopPos  + 'px';
         }
     }
 

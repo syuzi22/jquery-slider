@@ -15,16 +15,22 @@ import {Grid} from './Grid'
 import {
     ThumbHorChangedPosition,
     ThumbVerChangedPosition,
-    ThumbFromChangedPosition,
-    ThumbToChangedPosition,
+    ThumbFromHorChangedPosition,
+    ThumbToHorChangedPosition,
+    ThumbFromVerChangedPosition,
+    ThumbToVerChangedPosition,
     CalcedValueHor,
     CalcedValueVer,
-    CalcedFromValue,
-    CalcedToValue,
+    CalcedFromValueHor,
+    CalcedFromValueVer,
+    CalcedToValueHor,
+    CalcedToValueVer,
     CalcedAdjustedValueHor,
     CalcedAdjustedValueVer,
-    CalcedAdjustedFromValue,
-    CalcedAdjustedToValue,
+    CalcedAdjustedFromValueHor,
+    CalcedAdjustedFromValueVer,
+    CalcedAdjustedToValueHor,
+    CalcedAdjustedToValueVer,
     CalcedSliderWidth,
     CalcedSliderHeight,
     LineClicked_H,
@@ -104,9 +110,11 @@ export class Controller {
 
 
         if (this.options.orientation === 'vertical') {
+
             this.view.getWrapNode().classList.add('slider__wrap_ver');
             this.view.getMinMaxNode().classList.add('slider__minmax_ver');
             this.view.getToNode().classList.add('slider__to_ver');
+
             this.thumb.drawVertical();
             this.thumb.addVerticalMovement(this.view.getLineNode());
             this.line.addLineClickOption_V();
@@ -126,19 +134,39 @@ export class Controller {
         this.doubleThumb = new DoubleThumb(this.view.getThumbFromNode(), this.view.getThumbToNode());
         this.doubleThumb.addObserver(this);
         this.grid = new Grid(this.view.getGridNode());
+        this.view.setMin(this.options.min);
+        this.view.setMax(this.options.max);
 
         if (this.options.orientation === 'vertical') {
-            console.log('VerticalDouble');
+
+            this.view.getWrapNode().classList.add('slider__wrap_ver');
+            this.view.getMinMaxNode().classList.add('slider__minmax_ver');
+            this.view.getToNode().classList.add('slider__to_ver');
+            this.view.getFromNode().classList.add('slider__from_ver');
+
+            this.doubleThumb.drawVertical();
+            this.doubleThumb.addVerticalMovement(this.view.getLineNode());
+
+            this.line.addLineClickOption_V();
+            this.grid.drawLabels_V((this.options.max - this.options.min) / this.options.step);
+
+            this.model.calcFromValue_V();
+            this.model.calcToValue_V();
+
+
+
         } else {
             this.doubleThumb.drawHorizontal();
             this.doubleThumb.addHorizontalMovement(this.view.getLineNode());
+
             this.line.addLineClickOption_H();
             this.grid.drawLabels_H((this.options.max - this.options.min) / this.options.step);
-            this.view.setMin(this.options.min);
-            this.view.setMax(this.options.max);
+
+            this.model.calcFromValue_H();
+            this.model.calcToValue_H();
+
+
         }
-        this.model.calcFromValue();
-        this.model.calcToValue();
 
     }
 
@@ -173,15 +201,15 @@ export class Controller {
                 let middle = (to + from) / 2;
                 if (from === to) {
                     if (obj.position > to) {
-                        this.model.calcToValue(obj.position);
+                        this.model.calcToValue_H(obj.position);
                     } else {
-                        this.model.calcFromValue(obj.position);
+                        this.model.calcFromValue_H(obj.position);
                     }
                 } else if (obj.position > middle || obj.position > to) {
-                    this.model.calcToValue(obj.position);
+                    this.model.calcToValue_H(obj.position);
                     return;
                 } else if (obj.position < middle || obj.position < from) {
-                    this.model.calcFromValue(obj.position);
+                    this.model.calcFromValue_H(obj.position);
                     return;
                 }
             } else {
@@ -192,24 +220,26 @@ export class Controller {
                 obj.position = 0;
             } else if (obj.position > this.view.getLineNode().offsetHeight) {
                 obj.position = this.view.getLineNode().offsetHeight - this.view.getThumbToNode().offsetHeight;
-            // }
-            // if (this.options.type === Type.Double) {
-            //     let from = this.view.getThumbFromNode().getBoundingClientRect().left - this.view.getLineNode().getBoundingClientRect().left;
-            //     let to = this.view.getThumbToNode().getBoundingClientRect().left - this.view.getLineNode().getBoundingClientRect().left;
-            //     let middle = (to + from) / 2;
-            //     if (from === to) {
-            //         if (obj.position > to) {
-            //             this.model.calcToValue(obj.position);
-            //         } else {
-            //             this.model.calcFromValue(obj.position);
-            //         }
-            //     } else if (obj.position > middle || obj.position > to) {
-            //         this.model.calcToValue(obj.position);
-            //         return;
-            //     } else if (obj.position < middle || obj.position < from) {
-            //         this.model.calcFromValue(obj.position);
-            //         return;
-            //     }
+            }
+            //////////////////
+            if (this.options.type === Type.Double) {
+                let from = this.view.getLineNode().getBoundingClientRect().bottom - this.view.getThumbFromNode().getBoundingClientRect().bottom;
+                let to = this.view.getLineNode().getBoundingClientRect().bottom - this.view.getThumbToNode().getBoundingClientRect().bottom;
+                let middle = (to + from) / 2;
+                if (from === to) {
+                    if (obj.position > to) {
+                        this.model.calcToValue_V(obj.position);
+                    } else {
+                        this.model.calcFromValue_V(obj.position);
+                    }
+                } else if (obj.position > middle || obj.position > to) {
+                    this.model.calcToValue_V(obj.position);
+                    return;
+                } else if (obj.position < middle || obj.position < from) {
+                    this.model.calcFromValue_V(obj.position);
+                    return;
+                }
+                /////////////////////////////
             } else {
                 this.model.calcValue_V(obj.position);
             }
@@ -236,24 +266,47 @@ export class Controller {
             this.line.updateProgressBarHeight(obj.value)
         }
         ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
-            else if (obj instanceof ThumbFromChangedPosition) {
-            this.model.calcFromValue(obj.position);
-        } else if (obj instanceof ThumbToChangedPosition) {
-            this.model.calcToValue(obj.position);
+            else if (obj instanceof ThumbFromHorChangedPosition) {
+            this.model.calcFromValue_H(obj.position);
+        } else if (obj instanceof ThumbToHorChangedPosition) {
+            this.model.calcToValue_H(obj.position);
+
+        //здесь события от вертикальных бегунков
+        } else if (obj instanceof ThumbFromVerChangedPosition) {
+            this.model.calcFromValue_V(obj.position);
+        } else if (obj instanceof ThumbToVerChangedPosition) {
+            this.model.calcToValue_V(obj.position);
+
+
         // рассчитано значение from в Model, передаем его во View и установим trigger для внешнего кода
-        } else if (obj instanceof CalcedFromValue) {
+        } else if (obj instanceof CalcedFromValueHor) {
             this.view.setValue(this.view.getFromNode(), obj.value);
             $(this.node).trigger('slider.valueFromCalced', [obj.value])
-        } else if (obj instanceof CalcedToValue) {
+        } else if (obj instanceof CalcedToValueHor) {
             this.view.setValue(this.view.getToNode(), obj.value);
             $(this.node).trigger('slider.valueToCalced', [obj.value])
-        } else if (obj instanceof CalcedAdjustedFromValue) {
+        } else if (obj instanceof CalcedAdjustedFromValueHor) {
             this.doubleThumb.moveThumbFromOn_H(obj.value);
             this.line.setProgressBarLeftPos(obj.value);
-        } else if (obj instanceof CalcedAdjustedToValue) {
+        } else if (obj instanceof CalcedAdjustedToValueHor) {
             this.doubleThumb.moveThumbToOn_H(obj.value);
             this.line.setProgressBarRightPos(obj.value)
+             //здесь события от вертикальных расчетов модели
+        } else if (obj instanceof CalcedFromValueVer) {
+            this.view.setValue(this.view.getFromNode(), obj.value);
+            $(this.node).trigger('slider.valueFromCalced', [obj.value])
+        } else if (obj instanceof CalcedToValueVer) {
+            this.view.setValue(this.view.getToNode(), obj.value);
+            $(this.node).trigger('slider.valueToCalced', [obj.value])
+        } else if (obj instanceof CalcedAdjustedFromValueVer) {
+            this.doubleThumb.moveThumbFromOn_V(obj.value);
+            this.line.setProgressBarBottomPos(obj.value);
+        } else if (obj instanceof CalcedAdjustedToValueVer) {
+            this.doubleThumb.moveThumbToOn_V(obj.value);
+            this.line.setProgressBarTopPos(obj.value)
         }
+
+
         ////////////////////////////ITEMS///////////////////////////////////////////////////////////////
             else if (obj instanceof CalcedItemsStep) {
             this.itemsView.addItemsToLine(this.options.items, obj.value);

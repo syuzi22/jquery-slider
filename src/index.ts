@@ -167,7 +167,7 @@ $(document).ready(() => {
             inputMax.value = value;
         })
         .slider({
-            type: 'single',
+            type: 'double',
             min: 10,
             max: 90,
             from: 20, // если single, то этот параметр не учитывается

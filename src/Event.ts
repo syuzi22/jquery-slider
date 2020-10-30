@@ -41,7 +41,7 @@ export class ThumbVerChangedPosition extends SliderEvent{
 }
 
 //////////////
-export class ThumbFromChangedPosition extends SliderEvent{
+export class ThumbFromHorChangedPosition extends SliderEvent{
     position: number
     constructor(pos: number) {
         super();
@@ -49,7 +49,23 @@ export class ThumbFromChangedPosition extends SliderEvent{
     }
 }
 ////////////////
-export class ThumbToChangedPosition extends SliderEvent{
+export class ThumbToHorChangedPosition extends SliderEvent{
+    position: number
+    constructor(pos: number) {
+        super();
+        this.position = pos;
+    }
+}
+//////////////
+export class ThumbFromVerChangedPosition extends SliderEvent{
+    position: number
+    constructor(pos: number) {
+        super();
+        this.position = pos;
+    }
+}
+////////////////
+export class ThumbToVerChangedPosition extends SliderEvent{
     position: number
     constructor(pos: number) {
         super();
@@ -76,7 +92,15 @@ export class CalcedValueVer extends SliderEvent{
 }
 
 ////////////////
-export class CalcedFromValue extends SliderEvent{
+export class CalcedFromValueHor extends SliderEvent{
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+
+export class CalcedFromValueVer extends SliderEvent{
     value: number
     constructor(val: number) {
         super();
@@ -84,7 +108,15 @@ export class CalcedFromValue extends SliderEvent{
     }
 }
 /////////////////
-export class CalcedToValue extends SliderEvent{
+export class CalcedToValueHor extends SliderEvent{
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+
+export class CalcedToValueVer extends SliderEvent{
     value: number
     constructor(val: number) {
         super();
@@ -110,14 +142,31 @@ export class CalcedAdjustedValueVer extends SliderEvent {
     }
 }
 
-export class CalcedAdjustedFromValue extends SliderEvent {
+export class CalcedAdjustedFromValueHor extends SliderEvent {
     value: number
     constructor(val: number) {
         super();
         this.value = val;
     }
 }
-export class CalcedAdjustedToValue extends SliderEvent {
+
+export class CalcedAdjustedFromValueVer extends SliderEvent {
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+
+export class CalcedAdjustedToValueHor extends SliderEvent {
+    value: number
+    constructor(val: number) {
+        super();
+        this.value = val;
+    }
+}
+
+export class CalcedAdjustedToValueVer extends SliderEvent {
     value: number
     constructor(val: number) {
         super();
