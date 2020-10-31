@@ -35,8 +35,10 @@ import {
     CalcedSliderHeight,
     LineClicked_H,
     LineClicked_V,
-    CalcedItemsStep,
-    ItemClicked,
+    CalcedItemsStep_H,
+    CalcedItemsStep_V,
+    ItemClicked_H,
+    ItemClicked_V
 } from './Event'
 
 export class Controller {
@@ -171,14 +173,19 @@ export class Controller {
     }
 
     createItems() {
-        //тут пока не продумывала вертикаль///
         this.itemsView = new Items(this.view.getLineNode());
         this.itemsView.addObserver(this);
         this.view.getMaxNode().style.display = 'none';
         this.view.getMinNode().style.display = 'none';
-        this.model.updateSliderWidth(this.line.getLineWidth());
-        this.model.calcItemsStep(this.options.items.length - 1);
-        this.line.updateProgressBarWidth(0);
+        this.view.getProgressBarNode().style.display = 'none';
+
+        if (this.options.orientation === 'vertical') {
+            this.model.updateSliderHeight(this.line.getLineHeight());
+            this.model.calcItemsStep_V(this.options.items.length - 1);
+        } else {
+            this.model.updateSliderWidth(this.line.getLineWidth());
+            this.model.calcItemsStep_H(this.options.items.length - 1);
+        }
     }
 
     //метод для получения сообщений от Model и View
@@ -308,10 +315,10 @@ export class Controller {
 
 
         ////////////////////////////ITEMS///////////////////////////////////////////////////////////////
-            else if (obj instanceof CalcedItemsStep) {
-            this.itemsView.addItemsToLine(this.options.items, obj.value);
-        } else if (obj instanceof ItemClicked) {
-            this.line.updateProgressBarWidth(obj.value);
+            else if (obj instanceof CalcedItemsStep_H) {
+            this.itemsView.addItemsToLine_H(this.options.items, obj.value);
+        } else if (obj instanceof CalcedItemsStep_V) {
+            this.itemsView.addItemsToLine_V(this.options.items, obj.value);
         }
     }
 
@@ -360,6 +367,12 @@ export class Controller {
     //изменить максимум
     changeMax(value: number) {
         this.options.max = value;
+        this.reInit(this.options, this.node);
+    }
+
+    //изменить положение
+    changeOrientation(value: string) {
+        this.options.orientation = value;
         this.reInit(this.options, this.node);
     }
 

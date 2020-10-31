@@ -77,6 +77,7 @@ export class Line extends Observable {
         if (position >= 0) {
             this.progressBarNode.style.height =  position + 'px';
             this.progressBarNode.style.marginTop =  this.getLineHeight() - position + 'px';
+            console.log('marg', this.progressBarNode.style.marginTop)
             this.progressBarNode.style.borderBottomLeftRadius = '5px';
             this.progressBarNode.style.borderBottomRightRadius = '5px';
 

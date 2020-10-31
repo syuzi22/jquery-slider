@@ -1,5 +1,5 @@
 import {Observable} from './Observable'
-import { CalcedValueHor, CalcedValueVer, CalcedFromValueHor, CalcedFromValueVer, CalcedToValueHor, CalcedToValueVer, CalcedAdjustedValueHor, CalcedAdjustedValueVer, CalcedAdjustedFromValueHor, CalcedAdjustedFromValueVer, CalcedAdjustedToValueHor, CalcedAdjustedToValueVer, CalcedItemsStep } from './Event'
+import { CalcedValueHor, CalcedValueVer, CalcedFromValueHor, CalcedFromValueVer, CalcedToValueHor, CalcedToValueVer, CalcedAdjustedValueHor, CalcedAdjustedValueVer, CalcedAdjustedFromValueHor, CalcedAdjustedFromValueVer, CalcedAdjustedToValueHor, CalcedAdjustedToValueVer, CalcedItemsStep_H, CalcedItemsStep_V} from './Event'
 import { Options, OptionsInterface } from './Options';
 
 export class Model extends Observable {
@@ -188,10 +188,15 @@ export class Model extends Observable {
 
 
     ////////////////////////////ITEMS////////////////////////////////////////////////////////////////////////////////////////
-    calcItemsStep(itemsNum: number) {
+    calcItemsStep_H(itemsNum: number) {
         this.itemsStep = this.sliderWidth / itemsNum
-        const calcedItemsStep = new CalcedItemsStep(this.itemsStep);
-        this.notifyObservers(calcedItemsStep);
+        const calcedItemsStepHor = new CalcedItemsStep_H(this.itemsStep);
+        this.notifyObservers(calcedItemsStepHor);
+    }
+    calcItemsStep_V(itemsNum: number) {
+        this.itemsStep = this.sliderHeight / itemsNum
+        const calcedItemsStepVer = new CalcedItemsStep_V(this.itemsStep);
+        this.notifyObservers(calcedItemsStepVer);
     }
 
     ////////////////////////API///////////////////////////////////////////////

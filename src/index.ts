@@ -89,6 +89,18 @@ $.fn.slider = function (settings: object) : JQuery {
         });
     };
 
+    ///////////////
+    this.changeOrientation = function (value: string) {
+        this.each(function () {
+            const node = this as HTMLElement;
+            if (!controllers.has(node)) {
+                return;
+            }
+            controllers.get(node).changeOrientation(value);
+        });
+    };
+
+
 
     ///////////////////////////////
 
@@ -167,14 +179,14 @@ $(document).ready(() => {
             inputMax.value = value;
         })
         .slider({
-            type: 'double',
+            type: 'single',
             min: 10,
             max: 90,
             from: 20, // если single, то этот параметр не учитывается
             to: 80,
             step: 10,
             items: ['junior', 'middle', 'senior'],
-            orientation: 'vertical',
+            // orientation: 'vertical',
             hideGrid: false,
             hideValue: false,
             hideMinMax: false
@@ -248,6 +260,8 @@ $(document).ready(() => {
     let hideValue = document.getElementById('hidevalue');
     let hideGrid = document.getElementById('hidegrid');
     let hideMinMax = document.getElementById('hideminmax');
+    let horizontalBut = document.getElementById('button__hor');
+    let verticalBut = document.getElementById('button__ver');
 
     singleBut.onclick = function() {
         mySlider.data('slider').changeView('single');
@@ -257,6 +271,14 @@ $(document).ready(() => {
     }
     itemsBut.onclick = function() {
         mySlider.data('slider').changeView('items');
+    }
+
+    horizontalBut.onclick = function() {
+        mySlider.data('slider').changeOrientation('horizontal');
+    }
+
+    verticalBut.onclick = function() {
+        mySlider.data('slider').changeOrientation('vertical');
     }
 
     hideValue.oninput = function() {

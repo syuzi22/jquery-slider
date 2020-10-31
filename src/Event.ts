@@ -194,16 +194,15 @@ export class LineClicked_V extends SliderEvent {
 
 // рассчитан шаг для вида слайдера Items
 
-export class CalcedItemsStep extends SliderEvent {
+export class CalcedItemsStep_H extends SliderEvent {
     value: number
     constructor(val: number) {
         super();
         this.value = val;
     }
 }
-// клик по item
 
-export class ItemClicked extends SliderEvent {
+export class CalcedItemsStep_V extends SliderEvent {
     value: number
     constructor(val: number) {
         super();
