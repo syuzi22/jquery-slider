@@ -21,6 +21,25 @@ export class Items extends Observable {
         }
     }
 
+    itemClickHandler_H(event: MouseEvent) {
+        let target = event.target as HTMLElement;
+        let elems = target.parentElement.children;
+        for (let i = 0; i < elems.length; i++) {
+            if (elems[i].classList.contains('slider__item_hor')) {
+                elems[i].classList.remove('slider__item_selected_hor');
+            }
+            if (elems[i].firstElementChild && elems[i].firstElementChild.classList.contains('slider__item-name_hor')) {
+                elems[i].firstElementChild.classList.remove('slider__item-name_selected_hor');
+            }
+        }
+        if (target.classList.contains('slider__item-name_hor')) {
+            return;
+        }
+
+        target.classList.add('slider__item_selected_hor');
+        target.firstElementChild.classList.add('slider__item-name_selected_hor');
+    }
+
     addItemsToLine_V(items: Array<string>, step: number) {
         const self = this;
         let count = 0;
@@ -35,21 +54,6 @@ export class Items extends Observable {
         }
     }
 
-    itemClickHandler_H(event: MouseEvent) {
-        let target = event.target as HTMLElement;
-        let elems = target.parentElement.children;
-        for (let i = 0; i < elems.length; i++) {
-            if (elems[i].classList.contains('slider__item_hor')) {
-                elems[i].classList.remove('slider__item_selected_hor');
-            }
-            if (elems[i].firstElementChild && elems[i].firstElementChild.classList.contains('slider__item-name_hor')) {
-                elems[i].firstElementChild.classList.remove('slider__item-name_selected_hor');
-            }
-        }
-        target.classList.add('slider__item_selected_hor');
-        target.firstElementChild.classList.add('slider__item-name_selected_hor');
-    }
-
     itemClickHandler_V(event: MouseEvent) {
         let target = event.target as HTMLElement;
         let elems = target.parentElement.children;
@@ -60,6 +64,9 @@ export class Items extends Observable {
             if (elems[i].firstElementChild && elems[i].firstElementChild.classList.contains('slider__item-name_ver')) {
                 elems[i].firstElementChild.classList.remove('slider__item-name_selected_ver');
             }
+        }
+        if (target.classList.contains('slider__item-name_ver')) {
+            return;
         }
         target.classList.add('slider__item_selected_ver');
         target.firstElementChild.classList.add('slider__item-name_selected_ver');
