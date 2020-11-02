@@ -1,5 +1,12 @@
 import {Observable} from './Observable'
-import { ThumbFromHorChangedPosition, ThumbToHorChangedPosition, ThumbFromVerChangedPosition, ThumbToVerChangedPosition, CalcedSliderWidth, CalcedSliderHeight } from './Event'
+import {
+    ThumbFromHorChangedPosition,
+    ThumbToHorChangedPosition,
+    ThumbFromVerChangedPosition,
+    ThumbToVerChangedPosition,
+    CalcedSliderWidth,
+    CalcedSliderHeight
+} from './Event'
 
 const PointerDownState = 'down';
 const PointerUpState = 'up';
@@ -169,6 +176,7 @@ export class DoubleThumb extends Observable {
 
 
     moveThumbFromOn_H(position: number) {
+        //console.log('moveThumbFromOn_H', position)
         this.thumbFrom.style.left = position + 'px';
     }
     moveThumbToOn_H(position: number) {

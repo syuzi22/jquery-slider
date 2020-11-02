@@ -29,7 +29,7 @@ export class Options implements OptionsInterface {
     readonly hideGrid: boolean; //enable grid of values above the slider
     readonly orientation: string; //horizontal or vertical
     hideValue: boolean; //hides from and to label
-    hideMinMax: boolean;
+    hideMinMax: boolean; //hides minimum and maximum
 
     constructor(settings: OptionsInterface) {
         this.type = settings.type || Type.Single;

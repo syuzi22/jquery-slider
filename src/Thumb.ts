@@ -1,5 +1,10 @@
-import {Observable} from './Observable'
-import { ThumbHorChangedPosition, ThumbVerChangedPosition, CalcedSliderWidth, CalcedSliderHeight } from './Event'
+import { Observable } from './Observable'
+import {
+    ThumbHorChangedPosition,
+    ThumbVerChangedPosition,
+    CalcedSliderWidth,
+    CalcedSliderHeight
+} from './Event'
 
 const PointerDownState = 'down';
 const PointerUpState = 'up';

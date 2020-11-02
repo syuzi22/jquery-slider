@@ -37,8 +37,8 @@ import {
     LineClicked_V,
     CalcedItemsStep_H,
     CalcedItemsStep_V,
-    ItemClicked_H,
-    ItemClicked_V
+    GridClicked_H,
+    GridClicked_V
 } from './Event'
 
 export class Controller {
@@ -107,6 +107,7 @@ export class Controller {
         this.thumb = new Thumb(this.view.getThumbToNode());
         this.thumb.addObserver(this);
         this.grid = new Grid(this.view.getGridNode());
+        this.grid.addObserver(this)
         this.view.setMin(this.options.min);
         this.view.setMax(this.options.max);
 
@@ -136,6 +137,7 @@ export class Controller {
         this.doubleThumb = new DoubleThumb(this.view.getThumbFromNode(), this.view.getThumbToNode());
         this.doubleThumb.addObserver(this);
         this.grid = new Grid(this.view.getGridNode());
+        this.grid.addObserver(this)
         this.view.setMin(this.options.min);
         this.view.setMax(this.options.max);
 
@@ -166,8 +168,6 @@ export class Controller {
 
             this.model.calcFromValue_H();
             this.model.calcToValue_H();
-
-
         }
 
     }
@@ -195,8 +195,8 @@ export class Controller {
             this.model.updateSliderWidth(obj.value);
         } else if (obj instanceof CalcedSliderHeight) {
             this.model.updateSliderHeight(obj.value);
-        // клик по слайдеру, Model рассчитает какому значению он соответствует и куда переместить бегунок
-        } else if (obj instanceof LineClicked_H) {
+        // клик по слайдеру или шкале, Model рассчитает какому значению он соответствует и куда переместить бегунок
+        } else if (obj instanceof LineClicked_H || obj instanceof GridClicked_H) {
             if (obj.position < 0) {
                 obj.position = 0;
             } else if (obj.position > this.view.getLineNode().offsetWidth - this.view.getThumbToNode().offsetWidth) {
@@ -222,7 +222,7 @@ export class Controller {
             } else {
                 this.model.calcValue_H(obj.position);
             }
-        } else if (obj instanceof LineClicked_V) {
+        } else if (obj instanceof LineClicked_V || obj instanceof GridClicked_V) {
             if (obj.position < 0) {
                 obj.position = 0;
             } else if (obj.position > this.view.getLineNode().offsetHeight) {
@@ -270,10 +270,10 @@ export class Controller {
             this.line.updateProgressBarWidth(obj.value)
         } else if (obj instanceof CalcedAdjustedValueVer) {
             this.thumb.moveThumbOn_V(obj.value);
-            this.line.updateProgressBarHeight(obj.value)
+            this.line.updateProgressBarHeight(obj.value + this.view.getToNode().offsetHeight / 2)
         }
         ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
-            else if (obj instanceof ThumbFromHorChangedPosition) {
+        else if (obj instanceof ThumbFromHorChangedPosition) {
             this.model.calcFromValue_H(obj.position);
         } else if (obj instanceof ThumbToHorChangedPosition) {
             this.model.calcToValue_H(obj.position);
@@ -297,7 +297,7 @@ export class Controller {
             this.line.setProgressBarLeftPos(obj.value);
         } else if (obj instanceof CalcedAdjustedToValueHor) {
             this.doubleThumb.moveThumbToOn_H(obj.value);
-            this.line.setProgressBarRightPos(obj.value)
+            this.line.setProgressBarRightPos(obj.value + this.view.getThumbToNode().offsetWidth / 2)
              //здесь события от вертикальных расчетов модели
         } else if (obj instanceof CalcedFromValueVer) {
             this.view.setValue(this.view.getFromNode(), obj.value);
@@ -307,10 +307,10 @@ export class Controller {
             $(this.node).trigger('slider.valueToCalced', [obj.value])
         } else if (obj instanceof CalcedAdjustedFromValueVer) {
             this.doubleThumb.moveThumbFromOn_V(obj.value);
-            this.line.setProgressBarBottomPos(obj.value);
+            this.line.setProgressBarBottomPos(obj.value + this.view.getFromNode().offsetHeight / 2);
         } else if (obj instanceof CalcedAdjustedToValueVer) {
             this.doubleThumb.moveThumbToOn_V(obj.value);
-            this.line.setProgressBarTopPos(obj.value)
+            this.line.setProgressBarTopPos(obj.value + this.view.getToNode().offsetHeight / 2)
         }
 
 

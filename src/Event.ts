@@ -192,6 +192,26 @@ export class LineClicked_V extends SliderEvent {
     }
 }
 
+//произошел клик по шкале
+
+export class GridClicked_H extends SliderEvent {
+    position: number
+    constructor(val: number) {
+        super();
+        this.position = val;
+    }
+}
+
+export class GridClicked_V extends SliderEvent {
+    position: number
+    constructor(val: number) {
+        super();
+        this.position = val;
+    }
+}
+
+
+
 // рассчитан шаг для вида слайдера Items
 
 export class CalcedItemsStep_H extends SliderEvent {
