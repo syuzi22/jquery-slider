@@ -4,13 +4,21 @@
     "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
-    //"jsx": "react",
-    //"allowJs": true,
     "sourceMap": true,
     "removeComments": false,
-    "types": ["node", "jasmine", "jquery"]
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "typeRoots": ["node_modules/@types", "./types"],
+    "types": ["node", "jasmine", "jquery", "jqueryslider"],
+    "lib": ["es5", "es6", "dom"]
   },
-  "include": ["src/**/*.ts", "src/**/*.js"],
-  "exclude": ["node_modules"],
-  "typeRoots": ["node_modules/@types"]
+  "files": [
+      "./src/index.ts"
+  ],
+  "include": [
+      "types/**/index.d.ts",
+      "src/**/*.ts",
+      "src/**/*.js"
+  ],
+  "exclude": ["node_modules"]
 }
