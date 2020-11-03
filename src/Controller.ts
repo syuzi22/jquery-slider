@@ -101,6 +101,14 @@ export class Controller {
         if (this.options.hideValue === true) {
             this.view.hideValue(true);
         }
+
+        if (this.options.hideGrid === true) {
+            this.view.hideGrid(true);
+        }
+
+        if (this.options.hideMinMax === true) {
+            this.view.hideMinMax(true);
+        }
     }
 
     createSingle() {
@@ -182,6 +190,7 @@ export class Controller {
         if (this.options.orientation === 'vertical') {
             this.model.updateSliderHeight(this.line.getLineHeight());
             this.model.calcItemsStep_V(this.options.items.length - 1);
+            this.view.getWrapNode().classList.add('slider__wrap_ver');
         } else {
             this.model.updateSliderWidth(this.line.getLineWidth());
             this.model.calcItemsStep_H(this.options.items.length - 1);

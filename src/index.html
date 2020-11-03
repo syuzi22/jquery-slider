@@ -9,69 +9,72 @@
 
 <body>
     <div class="wrapper">
-        <div class="slider"></div>
-
-        <div class="example">
-            <div style="margin-top: 20px; margin-bottom: 10px;">
-                <div>
-                    <label class="slider-inputlabel"> Change Minimum
-                        <input type="text" class="slider-min" onclick="this.select();"></input>
-                    </label>
-                </div>
-                <div>
-                    <label class="slider-inputlabel"> Change Maximum
-                        <input type="text" class="slider-max" onclick="this.select();"></input>
-                    </label>
-                </div>
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label class="slider-inputlabel"> Single slider input
-                    <input type="text" class="slider-input" onclick="this.select();"></input>
-                </label>
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label class="slider-inputlabel"> Step input
-                    <input type="text" class="slider-step" onclick="this.select();"></input>
-                </label>
-            </div>
-            <div>
-                <label class="slider-inputlabel"> Double slider input
-                    <input type="text" class="slider-input-from" onclick="this.select();"></input>
-                    <input type="text" class="slider-input-to" onclick="this.select();"></input>
-                </label>
-            </div>
-            <div class="slider__buttons">
-                <button id="button__single">Single</button>
-                <button id="button__double">Double</button>
-                <button id="button__items">Items</button>
-            </div>
-            <div class="slider__buttons">
-                <button id="button__hor">Horizontal</button>
-                <button id="button__ver">Vertical</button>
-            </div>
-            <div class="slider__buttons" style="margin-bottom: 10px;">
-                <div>
-                    <label> Hide Value
-                        <input type="checkbox" name="slider-hide-value" id="hidevalue">
-                    </label>
-                </div>
-                <div>
-                    <label> Hide Grid
-                        <input type="checkbox" name="slider-hide-grid" id="hidegrid">
-                    </label>
-                </div>
-                <div>
-                    <label> Hide Min and Max
-                        <input type="checkbox" name="slider-hide-minmax" id="hideminmax">
-                    </label>
-                </div>
-            </div>
+        <h1>Demo</h1>
+        <h2>Dinamic configuration</h2>
+        <div class="slider__multi-wrap">
+            <table class="slider__multi-panel">
+                <tr>
+                    <td>Slider type</td>
+                    <td><button id="button__single">Single</button><button id="button__double">Double</button><button id="button__items">Items</button></td>
+                </tr>
+                <tr>
+                    <td>Single value</td>
+                    <td><input type="text" class="slider-input-single"></td>
+                </tr>
+                <tr>
+                    <td>Value from</td>
+                    <td><input type="text" class="slider-input-from"></td>
+                </tr>
+                <tr>
+                    <td>Value to</td>
+                    <td><input type="text" class="slider-input-to"></td>
+                </tr>
+                <tr>
+                    <td>Minimum</td>
+                    <td><input type="text" class="slider-min"></td>
+                </tr>
+                <tr>
+                    <td>Maximum</td>
+                    <td><input type="text" class="slider-max"></td>
+                </tr>
+                <tr>
+                    <td>Step</td>
+                    <td><input type="text" class="slider-step"></td>
+                </tr>
+                <tr>
+                    <td>Hide value</td>
+                    <td><input type="checkbox" id="hidevalue"></td>
+                </tr>
+                <tr>
+                    <td>Hide grid</td>
+                    <td><input type="checkbox" id="hidegrid"></td>
+                </tr>
+                <tr>
+                    <td>Hide minimum and maximum</td>
+                    <td><input type="checkbox" id="hideminmax"></td>
+                </tr>
+                <tr>
+                    <td>Direction</td>
+                    <td><button id="button__hor">Horizontal</button><button id="button__ver">Vertical</button></td>
+                </tr>
+            </table>
+            <div class="slider__multi"></div>
+        </div>
+        <hr>
+        <h2>Samples</h2>
+        <div class="slider__simple-wrap">
+            <div class="slider__simple"></div>
+        </div>
+        <div class="slider__single-wrap">
+            <div class="slider__single"></div>
+        </div>
+        <div class="slider__range-wrap">
+            <div class="slider__range"></div>
+        </div>
+        <div class="slider__items-wrap">
+            <div class="slider__items"></div>
         </div>
     </div>
-
-
-    <div class="slider2"></div>
-
 </body>
 
 </html>
