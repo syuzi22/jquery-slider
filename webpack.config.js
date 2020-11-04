@@ -5,15 +5,12 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-function getConfig(isDev) {
+
+function getCommonConfig(isDev) {
     'use strict';
 
     return {
         mode: isDev ? 'development' : 'production',
-        entry: {
-            slider: ['@babel/polyfill', './src/index.ts'],
-            demo: ['@babel/polyfill', './src/index.ts', './src/demo/demo.ts']
-        },
         output: {
             filename: '[name]/[name].js',
             path: path.resolve(__dirname, 'dist'),
@@ -21,25 +18,8 @@ function getConfig(isDev) {
         resolve: {
             extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
         },
-        devServer: {
-            port: 4200,
-            index: './demo/index.html',
-        },
         devtool: isDev ? 'inline-source-map' : false,
         plugins: [
-            new HtmlWebpackPlugin({
-                filename: 'demo/index.html',
-                template: 'src/demo/index.html',
-                chunks: ['demo']
-            }),
-            new webpack.ProvidePlugin({
-                $: 'jquery',
-                jQuery: 'jquery',
-            }),
-            new MiniCssExtractPlugin({
-                filename: '[name]/[name].css',
-            }),
-            new CleanWebpackPlugin(),
         ],
         module: {
             rules: [
@@ -83,6 +63,63 @@ function getConfig(isDev) {
     }
 }
 
+function getSliderConfig(baseConfig) {
+    'use strict';
+
+    let config = Object.assign({}, baseConfig, {
+        entry: {
+            slider: ['@babel/polyfill', './src/index.ts'],
+        }
+    });
+    config.plugins = [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name]/[name].css',
+        }),
+        new CleanWebpackPlugin()
+    ]
+
+    return config
+}
+
+function getDemoConfig(baseConfig) {
+    'use strict';
+
+    let config = Object.assign({}, baseConfig, {
+        entry: {
+            demo: ['@babel/polyfill', './src/index.ts', './src/demo/demo.ts']
+        }
+    });
+
+    config.plugins = [
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: 'src/demo/index.html',
+            chunks: ['demo']
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name]/[name].css',
+        }),
+        new CleanWebpackPlugin()
+    ]
+    config.devServer = {
+        port: 4200,
+        index: './docs/demo/index.html'
+    }
+    config.output = {
+        filename: '[name]/[name].js',
+        path: path.resolve(__dirname, 'docs'),
+    }
+    return config
+}
+
 module.exports = (env, argv) => {
     'use strict';
 
@@ -94,5 +131,6 @@ module.exports = (env, argv) => {
         isDev = false
     }
 
-    return getConfig(isDev)
+    const baseConfig = getCommonConfig(isDev)
+    return [getSliderConfig(baseConfig), getDemoConfig(baseConfig)]
 }
