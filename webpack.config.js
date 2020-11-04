@@ -5,7 +5,6 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-
 function getCommonConfig(isDev) {
     'use strict';
 
@@ -19,8 +18,7 @@ function getCommonConfig(isDev) {
             extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
         },
         devtool: isDev ? 'inline-source-map' : false,
-        plugins: [
-        ],
+        plugins: [],
         module: {
             rules: [
                 {
@@ -81,6 +79,10 @@ function getSliderConfig(baseConfig) {
         }),
         new CleanWebpackPlugin()
     ]
+    config.devServer = {
+        contentBase: './dist',
+        inline: false
+    }
 
     return config
 }
@@ -125,9 +127,9 @@ module.exports = (env, argv) => {
 
     let isDev = process.env.NODE_ENV === 'development'
 
-    if (argv.mode === 'development') {
+    if (argv && argv.mode === 'development') {
         isDev = true
-    } else if (argv.mode === 'production') {
+    } else if (argv && argv.mode === 'production') {
         isDev = false
     }
 

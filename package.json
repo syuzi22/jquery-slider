@@ -1,13 +1,13 @@
 {
-  "name": "range-slider",
+  "name": "json-slider",
   "version": "1.0.0",
   "description": "plugin for jquery",
-  "main": "index.js",
+  "main": "slider/slider.js",
   "scripts": {
     "dev": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack --mode development",
     "build": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack --mode production",
     "start": "webpack-dev-server --mode development --open",
-    "test": "./node_modules/.bin/karma start karma.conf.js"
+    "test": "NODE_ENV=development ./node_modules/.bin/karma start karma.conf.js"
   },
   "browserslist": "> 0.25%, not dead",
   "author": "Susanna <syuzi22@gmail.com>",
