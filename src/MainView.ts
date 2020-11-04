@@ -1,4 +1,4 @@
-interface VeiwInterface {
+export interface VeiwInterface {
     render(): string;
 }
 
@@ -74,8 +74,6 @@ export class MainView implements VeiwInterface {
         return this.node.querySelector('.slider__progressbar');
     }
 
-    ////////
-
     setValue(node: HTMLElement, value: number) {
         node.textContent = value.toString();
     }
@@ -90,8 +88,6 @@ export class MainView implements VeiwInterface {
         node.textContent = value.toString();
     }
 
-
-    ///////
     hideValue(value: boolean) {
         if (value === true) {
             this.getFromNode().style.display = 'none';
@@ -101,7 +97,7 @@ export class MainView implements VeiwInterface {
             this.getToNode().style.display = 'block';
         }
     }
-    /////////
+
     hideGrid(value: boolean) {
         if (value === true) {
             this.getGridNode().style.display = 'none';
@@ -109,7 +105,7 @@ export class MainView implements VeiwInterface {
             this.getGridNode().style.display = 'flex';
         }
     }
-    /////////
+
     hideMinMax(value: boolean) {
         if (value === true) {
             this.getMinMaxNode().style.display = 'none';

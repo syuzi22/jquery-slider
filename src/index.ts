@@ -1,7 +1,6 @@
 import './style.css'
 import {Controller} from './Controller'
 import {Options} from './Options'
-import './demo'
 
 $.fn.slider = function (settings: object) : JQuery {
     const options = new Options(settings);

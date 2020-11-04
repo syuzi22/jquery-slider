@@ -1,4 +1,4 @@
-import {Observable} from './Observable'
+import { Observable } from './Observable'
 import { LineClicked_H, LineClicked_V } from './Event'
 
 export class Line extends Observable {
@@ -9,11 +9,11 @@ export class Line extends Observable {
     progressBarNodeTopPos: number
     progressBarNodeBottomPos: number
 
-
     constructor(node: HTMLElement) {
         super();
         this.sliderLine = node;
     }
+
     drawHorizontalLine() {
         this.sliderLine.classList.add('slider__line_horizontal');
     }

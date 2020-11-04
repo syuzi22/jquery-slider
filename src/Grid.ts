@@ -3,6 +3,7 @@ import { GridClicked_H, GridClicked_V } from './Event'
 
 export class Grid extends Observable {
     grid: HTMLElement
+
     constructor(node: HTMLElement) {
         super();
         this.grid = node;

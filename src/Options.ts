@@ -19,17 +19,17 @@ export interface OptionsInterface {
 }
 
 export class Options implements OptionsInterface {
-    readonly type: Type; //single or double
+    readonly type: Type; //single, double or items
     readonly min: number; //slider min value
     readonly max: number; //slider max value
-    readonly from: number; // start position for left or single handle
-    readonly to: number; //start position for right handle
+    readonly from: number; // start position for left handle
+    readonly to: number; //start position for right handle or single handle
     readonly step: number; //sliders step
     readonly items: string[]; //grid items
-    readonly hideGrid: boolean; //enable grid of values above the slider
     readonly orientation: string; //horizontal or vertical
-    hideValue: boolean; //hides from and to label
-    hideMinMax: boolean; //hides minimum and maximum
+    readonly hideGrid: boolean; //enable grid of values above the slider
+    readonly hideValue: boolean; //hides from and to label
+    readonly hideMinMax: boolean; //hides minimum and maximum
 
     constructor(settings: OptionsInterface) {
         this.type = settings.type || Type.Single;

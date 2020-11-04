@@ -1,4 +1,4 @@
-import {Observable} from './Observable'
+import { Observable } from './Observable'
 import {
     ThumbFromHorChangedPosition,
     ThumbToHorChangedPosition,
@@ -171,12 +171,7 @@ export class DoubleThumb extends Observable {
         thumbTo.ondragstart = () => false;
     }
 
-
-
-
-
     moveThumbFromOn_H(position: number) {
-        //console.log('moveThumbFromOn_H', position)
         this.thumbFrom.style.left = position + 'px';
     }
     moveThumbToOn_H(position: number) {

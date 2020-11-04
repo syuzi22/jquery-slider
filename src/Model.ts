@@ -142,7 +142,6 @@ export class Model extends Observable {
         } else {
             this.toValue = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderWidth) / this.options.step) * this.options.step;
         }
-        // this.toValue must be a power of this.options.step
 
         this.toValue = Math.min(this.toValue, this.options.max);
 
@@ -158,7 +157,6 @@ export class Model extends Observable {
         } else {
             this.toValue = this.options.min + Math.round(((position * (this.options.max - this.options.min)) / this.sliderHeight) / this.options.step) * this.options.step;
         }
-        // this.toValue must be a power of this.options.step
 
         this.toValue = Math.min(this.toValue, this.options.max);
 
@@ -198,10 +196,6 @@ export class Model extends Observable {
         const adjustedToValueCalcedVer = new CalcedAdjustedToValueVer(this.adjustedToValue);
         this.notifyObservers(adjustedToValueCalcedVer);
     }
-
-    ////////////////////////////
-
-
 
     ////////////////////////////ITEMS////////////////////////////////////////////////////////////////////////////////////////
     calcItemsStep_H(itemsNum: number) {
@@ -271,6 +265,5 @@ export class Model extends Observable {
             that.notifyObservers(calcedToValueHor);
             that.calcAdjustedToValue_H();
         }
-
     }
 }

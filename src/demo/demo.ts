@@ -1,9 +1,7 @@
-interface JQuery {
-    slider(settings: object) : JQuery;
-}
+import './style.css'
+import 'jquery'
 
 $(() => {
-
     const mySliderSimple = $('.slider__simple').slider({
         type: 'double',
         min: 0,

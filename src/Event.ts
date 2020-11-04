@@ -1,10 +1,10 @@
-//уведомление о новом событии в слайдере
+// new event notification
 export class SliderEvent {
     constructor() {
     }
 }
 
-//рассчитана ширина слайдера
+// calculated slider width
 export class CalcedSliderWidth extends SliderEvent {
     value: number;
     constructor(value: number) {
@@ -13,7 +13,7 @@ export class CalcedSliderWidth extends SliderEvent {
     }
 }
 
-//рассчитана высота слайдера
+// calculated slider height
 export class CalcedSliderHeight extends SliderEvent {
     value: number;
     constructor(value: number) {
@@ -22,7 +22,7 @@ export class CalcedSliderHeight extends SliderEvent {
     }
 }
 
-//бегунок изменил положение вследствие перетаскивания его мышью
+// thumb changed position
 
 export class ThumbHorChangedPosition extends SliderEvent{
     position: number
@@ -40,7 +40,6 @@ export class ThumbVerChangedPosition extends SliderEvent{
     }
 }
 
-//////////////
 export class ThumbFromHorChangedPosition extends SliderEvent{
     position: number
     constructor(pos: number) {
@@ -48,7 +47,7 @@ export class ThumbFromHorChangedPosition extends SliderEvent{
         this.position = pos;
     }
 }
-////////////////
+
 export class ThumbToHorChangedPosition extends SliderEvent{
     position: number
     constructor(pos: number) {
@@ -56,7 +55,7 @@ export class ThumbToHorChangedPosition extends SliderEvent{
         this.position = pos;
     }
 }
-//////////////
+
 export class ThumbFromVerChangedPosition extends SliderEvent{
     position: number
     constructor(pos: number) {
@@ -64,7 +63,7 @@ export class ThumbFromVerChangedPosition extends SliderEvent{
         this.position = pos;
     }
 }
-////////////////
+
 export class ThumbToVerChangedPosition extends SliderEvent{
     position: number
     constructor(pos: number) {
@@ -73,8 +72,7 @@ export class ThumbToVerChangedPosition extends SliderEvent{
     }
 }
 
-
-//рассчитано текущее значение слайдера для отображения пользователям над бегунком
+// calculated current value
 export class CalcedValueHor extends SliderEvent{
     value: number
     constructor(val: number) {
@@ -91,7 +89,6 @@ export class CalcedValueVer extends SliderEvent{
     }
 }
 
-////////////////
 export class CalcedFromValueHor extends SliderEvent{
     value: number
     constructor(val: number) {
@@ -107,7 +104,7 @@ export class CalcedFromValueVer extends SliderEvent{
         this.value = val;
     }
 }
-/////////////////
+
 export class CalcedToValueHor extends SliderEvent{
     value: number
     constructor(val: number) {
@@ -124,8 +121,7 @@ export class CalcedToValueVer extends SliderEvent{
     }
 }
 
-//на основе текущего значения рассчитано положение, которое должен занять бегунок
-
+// calculated position for thumb
 export class CalcedAdjustedValueHor extends SliderEvent {
     value: number
     constructor(val: number) {
@@ -175,7 +171,7 @@ export class CalcedAdjustedToValueVer extends SliderEvent {
 }
 
 
-//произошел клик по слайдеру
+// click on line
 export class LineClicked_H extends SliderEvent {
     position: number
     constructor(val: number) {
@@ -192,8 +188,7 @@ export class LineClicked_V extends SliderEvent {
     }
 }
 
-//произошел клик по шкале
-
+// click on grid
 export class GridClicked_H extends SliderEvent {
     position: number
     constructor(val: number) {
@@ -210,10 +205,7 @@ export class GridClicked_V extends SliderEvent {
     }
 }
 
-
-
-// рассчитан шаг для вида слайдера Items
-
+// calculated step for Items
 export class CalcedItemsStep_H extends SliderEvent {
     value: number
     constructor(val: number) {

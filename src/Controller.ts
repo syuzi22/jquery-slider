@@ -5,13 +5,13 @@ import {
     DoubleOptions,
     ItemsOptions
 } from './Options'
-import {Model} from './Model'
+import { Model } from './Model'
 import { MainView } from './MainView'
-import {Line} from './Line'
-import {Thumb} from './Thumb'
-import {DoubleThumb} from './DoubleThumb'
-import {Items} from './Items'
-import {Grid} from './Grid'
+import { Line } from './Line'
+import { Thumb } from './Thumb'
+import { DoubleThumb } from './DoubleThumb'
+import { Items } from './Items'
+import { Grid } from './Grid'
 import {
     ThumbHorChangedPosition,
     ThumbVerChangedPosition,
@@ -118,14 +118,10 @@ export class Controller {
         this.grid.addObserver(this)
         this.view.setMin(this.options.min);
         this.view.setMax(this.options.max);
-
-
         if (this.options.orientation === 'vertical') {
-
             this.view.getWrapNode().classList.add('slider__wrap_ver');
             this.view.getMinMaxNode().classList.add('slider__minmax_ver');
             this.view.getToNode().classList.add('slider__to_ver');
-
             this.thumb.drawVertical();
             this.thumb.addVerticalMovement(this.view.getLineNode());
             this.line.addLineClickOption_V();
@@ -150,30 +146,21 @@ export class Controller {
         this.view.setMax(this.options.max);
 
         if (this.options.orientation === 'vertical') {
-
             this.view.getWrapNode().classList.add('slider__wrap_ver');
             this.view.getMinMaxNode().classList.add('slider__minmax_ver');
             this.view.getToNode().classList.add('slider__to_ver');
             this.view.getFromNode().classList.add('slider__from_ver');
-
             this.doubleThumb.drawVertical();
             this.doubleThumb.addVerticalMovement(this.view.getLineNode());
-
             this.line.addLineClickOption_V();
             this.grid.drawLabels_V((this.options.max - this.options.min) / this.options.step);
-
             this.model.calcFromValue_V();
             this.model.calcToValue_V();
-
-
-
         } else {
             this.doubleThumb.drawHorizontal();
             this.doubleThumb.addHorizontalMovement(this.view.getLineNode());
-
             this.line.addLineClickOption_H();
             this.grid.drawLabels_H((this.options.max - this.options.min) / this.options.step);
-
             this.model.calcFromValue_H();
             this.model.calcToValue_H();
         }
@@ -197,14 +184,14 @@ export class Controller {
         }
     }
 
-    //метод для получения сообщений от Model и View
+    // receiving messages method (from Model and View)
     onEvent (obj: object) {
-        //во View рассчитана ширина или высота слайдера, сохраним ее в модели для последующего использования
+        // the width or height of the slider is calculated
         if (obj instanceof CalcedSliderWidth) {
             this.model.updateSliderWidth(obj.value);
         } else if (obj instanceof CalcedSliderHeight) {
             this.model.updateSliderHeight(obj.value);
-        // клик по слайдеру или шкале, Model рассчитает какому значению он соответствует и куда переместить бегунок
+        // click on line or grid
         } else if (obj instanceof LineClicked_H || obj instanceof GridClicked_H) {
             if (obj.position < 0) {
                 obj.position = 0;
@@ -237,7 +224,6 @@ export class Controller {
             } else if (obj.position > this.view.getLineNode().offsetHeight) {
                 obj.position = this.view.getLineNode().offsetHeight - this.view.getThumbToNode().offsetHeight;
             }
-            //////////////////
             if (this.options.type === Type.Double) {
                 let from = this.view.getLineNode().getBoundingClientRect().bottom - this.view.getThumbFromNode().getBoundingClientRect().bottom;
                 let to = this.view.getLineNode().getBoundingClientRect().bottom - this.view.getThumbToNode().getBoundingClientRect().bottom;
@@ -255,25 +241,24 @@ export class Controller {
                     this.model.calcFromValue_V(obj.position);
                     return;
                 }
-                /////////////////////////////
             } else {
                 this.model.calcValue_V(obj.position);
             }
         }
         ////////////////////////////SINGLE///////////////////////////////////////////////////////////////
-        // изменилось положение бегунка во View, Model рассчитает значение для отображения и позицию с учетом шага
+        // thumb changed position
         else if (obj instanceof ThumbHorChangedPosition) {
             this.model.calcValue_H(obj.position);
         } else if (obj instanceof ThumbVerChangedPosition) {
             this.model.calcValue_V(obj.position);
-        // рассчитано значение слайдера в Model, передаем его во View и установим trigger для внешнего кода
+        // calculated current value in Model, pass it to View and set trigger for external code
         } else if (obj instanceof CalcedValueHor) {
             this.view.setValue(this.view.getToNode(), obj.value);
             $(this.node).trigger('slider.valueCalced', [obj.value])
         } else if (obj instanceof CalcedValueVer) {
             this.view.setValue(this.view.getToNode(), obj.value);
             $(this.node).trigger('slider.valueCalced', [obj.value])
-        // рассчитана позиция бегунка с учетом шага, передаем ее во View
+        // calculated position for thumb
         } else if (obj instanceof CalcedAdjustedValueHor) {
             this.thumb.moveThumbOn_H(obj.value);
             this.line.updateProgressBarWidth(obj.value)
@@ -282,38 +267,35 @@ export class Controller {
             this.line.updateProgressBarHeight(obj.value + this.view.getToNode().offsetHeight / 2)
         }
         ////////////////////////////DOUBLE///////////////////////////////////////////////////////////////
+        // thumb changed position
         else if (obj instanceof ThumbFromHorChangedPosition) {
             this.model.calcFromValue_H(obj.position);
         } else if (obj instanceof ThumbToHorChangedPosition) {
             this.model.calcToValue_H(obj.position);
-
-        //здесь события от вертикальных бегунков
         } else if (obj instanceof ThumbFromVerChangedPosition) {
             this.model.calcFromValue_V(obj.position);
         } else if (obj instanceof ThumbToVerChangedPosition) {
             this.model.calcToValue_V(obj.position);
-
-
-        // рассчитано значение from в Model, передаем его во View и установим trigger для внешнего кода
+        // calculated current value in Model, pass it to View and set trigger for external code
         } else if (obj instanceof CalcedFromValueHor) {
             this.view.setValue(this.view.getFromNode(), obj.value);
             $(this.node).trigger('slider.valueFromCalced', [obj.value])
         } else if (obj instanceof CalcedToValueHor) {
             this.view.setValue(this.view.getToNode(), obj.value);
             $(this.node).trigger('slider.valueToCalced', [obj.value])
-        } else if (obj instanceof CalcedAdjustedFromValueHor) {
-            this.doubleThumb.moveThumbFromOn_H(obj.value);
-            this.line.setProgressBarLeftPos(obj.value);
-        } else if (obj instanceof CalcedAdjustedToValueHor) {
-            this.doubleThumb.moveThumbToOn_H(obj.value);
-            this.line.setProgressBarRightPos(obj.value + this.view.getThumbToNode().offsetWidth / 2)
-             //здесь события от вертикальных расчетов модели
         } else if (obj instanceof CalcedFromValueVer) {
             this.view.setValue(this.view.getFromNode(), obj.value);
             $(this.node).trigger('slider.valueFromCalced', [obj.value])
         } else if (obj instanceof CalcedToValueVer) {
             this.view.setValue(this.view.getToNode(), obj.value);
             $(this.node).trigger('slider.valueToCalced', [obj.value])
+        // calculated position for thumb
+        } else if (obj instanceof CalcedAdjustedFromValueHor) {
+            this.doubleThumb.moveThumbFromOn_H(obj.value);
+            this.line.setProgressBarLeftPos(obj.value);
+        } else if (obj instanceof CalcedAdjustedToValueHor) {
+            this.doubleThumb.moveThumbToOn_H(obj.value);
+            this.line.setProgressBarRightPos(obj.value + this.view.getThumbToNode().offsetWidth / 2)
         } else if (obj instanceof CalcedAdjustedFromValueVer) {
             this.doubleThumb.moveThumbFromOn_V(obj.value);
             this.line.setProgressBarBottomPos(obj.value + this.view.getFromNode().offsetHeight / 2);
@@ -321,8 +303,6 @@ export class Controller {
             this.doubleThumb.moveThumbToOn_V(obj.value);
             this.line.setProgressBarTopPos(obj.value + this.view.getToNode().offsetHeight / 2)
         }
-
-
         ////////////////////////////ITEMS///////////////////////////////////////////////////////////////
             else if (obj instanceof CalcedItemsStep_H) {
             this.itemsView.addItemsToLine_H(this.options.items, obj.value);
@@ -332,9 +312,9 @@ export class Controller {
     }
 
 
-    //методы API
+    //API
 
-    //изменить вид слайдера
+    // change slider type
     changeView(view: string) {
         if (view === 'single') {
             this.options = new SingleOptions(this.options);
@@ -346,7 +326,7 @@ export class Controller {
         this.draw.call(this);
     }
 
-    //передать значение и изменить значение и положение бегунка
+    // update value and change thumb position
     updateValue(value: number) {
         this.model.updateValue(value)
     }
@@ -358,7 +338,7 @@ export class Controller {
     }
 
 
-    //изменить шаг
+    // change step
     changeStep(value: number) {
         if (value <= 0) {
             throw RangeError('Value must be positive');
@@ -367,25 +347,25 @@ export class Controller {
         this.reInit(this.options, this.node);
     }
 
-    //изменить минимум
+    // change minimum
     changeMin(value: number) {
         this.options.min = value;
         this.reInit(this.options, this.node);
     }
 
-    //изменить максимум
+    // change maximum
     changeMax(value: number) {
         this.options.max = value;
         this.reInit(this.options, this.node);
     }
 
-    //изменить положение
+    // change direction
     changeOrientation(value: string) {
         this.options.orientation = value;
         this.reInit(this.options, this.node);
     }
 
-    //скрыть значение над бегунком (единственным или "от" и "до")
+    // hide value
     hideValue(hide: boolean) {
         if (hide === true) {
             this.options.hideValue = true;
@@ -396,7 +376,7 @@ export class Controller {
         }
     }
 
-    //скрыть шкалу
+    // hide grid
     hideGrid(hide: boolean) {
         if (hide === true) {
             this.options.hideGrid = true;
@@ -407,7 +387,7 @@ export class Controller {
         }
     }
 
-    //скрыть минимум, максимум
+    // hide minimum, maximum
     hideMinMax(hide: boolean) {
         if (hide === true) {
             this.options.hideGrid = true;
