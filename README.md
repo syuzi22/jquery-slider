@@ -1,5 +1,7 @@
 # Плагин для jQuery с функционалом "бегунка" (слайдера)
 
+[Демо](https://syuzi22.github.io/jquery-slider/)
+
 Задание FSD на позицию Frontend Developer.
 
 ## Цель - получить:
