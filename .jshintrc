@@ -16,6 +16,8 @@
     // Allow ES6.
     "esversion": 6,
 
+    "asi": true,
+
     /*
      * ENFORCING OPTIONS
      * =================
