@@ -6,15 +6,10 @@
     "target": "es5",
     "sourceMap": true,
     "removeComments": false,
-    "declaration": true,
-    "declarationDir": "dist/types",
     "typeRoots": ["node_modules/@types", "./types"],
     "types": ["node", "jasmine", "jquery", "jqueryslider"],
     "lib": ["es5", "es6", "dom"]
   },
-  "files": [
-      "./src/index.ts"
-  ],
   "include": [
       "types/**/index.d.ts",
       "src/**/*.ts",
